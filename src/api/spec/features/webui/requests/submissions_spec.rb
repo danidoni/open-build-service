@@ -18,7 +18,7 @@ RSpec.feature 'Bootstrap_Requests_Submissions', type: :feature, js: true, vcr: t
         fill_in('To target project:', with: target_project.name)
         fill_in('To target package:', with: target_package.name)
         fill_in('bs_request_description', with: bs_request_description)
-        expect { click_button('Submit') }.to change(BsRequest, :count).by(1)
+        click_button('Submit')
         expect(page).to have_text("Submit package #{source_project} / #{source_package} "\
                                   "to package #{target_project} / #{target_package}")
         expect(page).to have_css('#description-text', text: bs_request_description)
@@ -33,7 +33,7 @@ RSpec.feature 'Bootstrap_Requests_Submissions', type: :feature, js: true, vcr: t
         click_link('Submit Package')
         fill_in('To target project:', with: target_project.name)
         fill_in('bs_request_description', with: bs_request_description)
-        expect { click_button('Submit') }.to change(BsRequest, :count).by(1)
+        click_button('Submit')
         expect(page).to have_text("Submit package #{source_project} / #{source_package} "\
                                   "to package #{target_project} / #{source_package}")
         expect(page).to have_css('#description-text', text: bs_request_description)
