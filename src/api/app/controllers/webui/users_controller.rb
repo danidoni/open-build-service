@@ -149,7 +149,8 @@ class Webui::UsersController < Webui::WebuiController
 
   def adjust_filters
     filters = params.slice(:search_text, :involved_projects, :involved_packages,
-                           :role_owner, :role_maintainer, :role_bugowner, :role_reviewer, :role_downloader, :role_reader)
+                           :role_maintainer, :role_bugowner, :role_reviewer, :role_downloader, :role_reader)
+    filters[:role_owner] = params[:role_owner] if @owner_root_project_exists && params.key?(:role_owner)
 
     filters[:search_text] = filters[:search_text]&.strip
     @filters = filters.dup
