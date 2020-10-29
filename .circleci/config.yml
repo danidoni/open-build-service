@@ -88,6 +88,9 @@ jobs:
       - run:
           name: Setup application
           command: cd src/api; bundle exec rake dev:prepare assets:precompile RAILS_ENV=test FORCE_EXAMPLE_FILES=1
+      - run:
+          name: Check for previous assets
+          command: cd src/api; ls -la public/assets
       - persist_to_workspace:
           root: .
           paths:
