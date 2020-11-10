@@ -7,9 +7,9 @@ class UserDailyContribution
   end
 
   def call
-    { comments: comments_for_date,
-      requests_reviewed: reviews_done_per_day,
-      commits: commits_done_per_day,
+    { comments: number_of_comments_for_date,
+      requests_reviewed: number_of_reviews_done_per_day,
+      commits: number_of_commits_done_per_day,
       requests_created: requests_created_for_date }
   end
 
@@ -19,11 +19,11 @@ class UserDailyContribution
     user.requests_created.where('date(created_at) = ?', date).pluck(:number)
   end
 
-  def comments_for_date
+  def number_of_comments_for_date
     user.comments.where('date(created_at) = ?', date).count
   end
 
-  def reviews_done_per_day
+  def number_of_reviews_done_per_day
     Review.where(reviewer: user.login, state: [:accepted, :declined])
           .where('date(reviews.created_at) = ?', date)
           .joins(:bs_request)
@@ -32,7 +32,7 @@ class UserDailyContribution
           .count(:id)
   end
 
-  def commits_done_per_day
+  def number_of_commits_done_per_day
     counts = Hash.new(0)
     packages = {}
     user.commit_activities.where(date: date).pluck(:project, :package, :count).each do |e|
