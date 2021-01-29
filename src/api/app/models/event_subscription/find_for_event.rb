@@ -10,7 +10,7 @@ class EventSubscription
       receivers_and_subscriptions = {}
 
       event.class.receiver_roles.flat_map do |receiver_role|
-        receivers = EventReceiversGatherer.new(event, receiver_role).call
+        receivers = EventReceiversFetcher.new(event, receiver_role).call
 
         options = { eventtype: event.eventtype, receiver_role: receiver_role, channel: channel }
         # Find the default subscription for this eventtype and receiver_role

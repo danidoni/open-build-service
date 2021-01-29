@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe EventReceiversGatherer, type: :service do
+RSpec.describe EventReceiversFetcher, type: :service do
   # Create package with an inherited maintainer
   let!(:project) { create(:confirmed_user, :with_home).home_project }
   let!(:package) { create(:package, project: project) }
