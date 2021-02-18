@@ -137,9 +137,9 @@ class BsRequestActionMaintenanceIncident < BsRequestAction
     # create channels
     pkg.add_channels
     # create patchinfo unless we have one
-    unless PackageKind.where(package: stage_project.packages, kind: "patchinfo").exists?
-      Patchinfo.new.create_patchinfo_from_request(stage_project, bs_request)
-    end
+    return if PackageKind.exists?(package: stage_project.packages, kind: 'patchinfo')
+
+    Patchinfo.new.create_patchinfo_from_request(stage_project, bs_request)
   end
 
   private
