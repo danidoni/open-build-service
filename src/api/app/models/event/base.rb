@@ -169,6 +169,13 @@ module Event
       save if self.undone_jobs.positive?
     end
 
+    def mark_job_done!
+      return unless undone_jobs.positive?
+
+      self.undone_jobs -= 1
+      save!
+    end
+
     # to be overwritten in subclasses
     def subject
       'Build Service Notification'
