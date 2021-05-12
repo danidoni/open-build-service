@@ -105,7 +105,7 @@ module Event
     end
 
     def initialize(attribs)
-      attributes = attribs.dup
+      attributes = attribs.dup.with_indifferent_access
       super()
       self.created_at = attribs[:time] if attributes[:time]
       attributes.delete :eventtype
