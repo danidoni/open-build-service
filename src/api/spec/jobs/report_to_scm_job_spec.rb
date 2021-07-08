@@ -6,7 +6,8 @@ RSpec.describe ReportToScmJob, vcr: false do
   let(:project) { create(:project, name: 'project_1', maintainer: user) }
   let(:package) { create(:package, name: 'package_1', project: project) }
   let(:repository) { create(:repository, name: 'repository_1', project: project) }
-  let(:event) { Event::BuildSuccess.create({ project: project.name, package: package.name, repository: repository.name, reason: 'foo' }) }
+  let(:architecture) { create(:architecture, name: 'x86_64') }
+  let(:event) { Event::BuildSuccess.create({ project: project.name, package: package.name, repository: repository.name, architecture: architecture.name, reason: 'foo' }) }
   let(:event_subscription) do
     EventSubscription.create(token: token,
                              user: user,
