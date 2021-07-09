@@ -127,27 +127,6 @@ RSpec.describe ReportToScmJob, vcr: false do
         event_subscription
       end
 
-
-      # architecture => inclusion (which could match/not match on the arch) && exclusion
-
-      # architecture
-          # only
-              # matching
-              # not matching
-          # ignore
-              # matching
-              # not matching
-
-      # repositories
-          # only
-              # matching
-              # not matching
-          # ignore
-              # matching
-              # not matching
-
-
-
       context 'which filter out the architectures of the event' do
         let(:workflow_filters) do
           { architectures: { only: ['i586'] } }

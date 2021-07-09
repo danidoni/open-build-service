@@ -28,26 +28,4 @@ class ReportToScmJob < CreateJob
     end
     true
   end
-
-  # private
-
-  # def report_for_repository?(event_repository, repository_filters)
-  #   return true if repository_filters.blank?
-
-  #   return true if repository_filters[:only]&.include?(event_repository)
-
-  #   return true if repository_filters[:ignore]&.exclude?(event_repository)
-
-  #   false
-  # end
-
-  # def report_for_architecture?(event_architecture, architecture_filters)
-  #   return true if architecture_filters.blank?
-
-  #   return true if architecture_filters[:only]&.include?(event_architecture)
-
-  #   return true if architecture_filters[:ignore]&.exclude?(event_architecture)
-
-  #   false
-  # end
 end

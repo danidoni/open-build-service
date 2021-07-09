@@ -10,6 +10,8 @@ module Workflows
       match_repository?(event.payload['repository']) && match_architecture?(event.payload['arch'])
     end
 
+    private
+
     def match_repository?(event_repository)
       return true if @repository_filters.blank?
 
