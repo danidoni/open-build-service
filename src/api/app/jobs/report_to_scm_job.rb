@@ -17,16 +17,16 @@ class ReportToScmJob < CreateJob
     EventSubscriptionsFinder.new
                             .for_scm_channel_with_token(event_type: event_type, event_package: event_package)
                             .each do |event_subscription|
-      workflow_filters = event_subscription.payload.with_indifferent_access[:workflow_filters]
+      workflow_filters = event_subscription.payload.with_indifferent_access[:workflow_filters] || {}
 
-      if workflow_filters.blank? || (report_for_repository?(event.payload['repository'], workflow_filters[:repositories]) && report_for_architecture?(event.payload['arch'], workflow_filters[:architectures]))
-        SCMStatusReporter.new(event.payload,
-                              event_subscription.payload,
-                              event_subscription.token.scm_token,
-                              event_subscription.eventtype).call
-      end
+      next unless report_for_repository?(event.payload['repository'], workflow_filters[:repositories])
+      next unless report_for_architecture?(event.payload['arch'], workflow_filters[:architectures])
+
+      SCMStatusReporter.new(event.payload,
+                            event_subscription.payload,
+                            event_subscription.token.scm_token,
+                            event_subscription.eventtype).call
     end
-
     true
   end
 
