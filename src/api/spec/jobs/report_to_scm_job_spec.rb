@@ -111,46 +111,107 @@ RSpec.describe ReportToScmJob, vcr: false do
       end
     end
 
-    context 'when the event subscription contains filter' do
-      # let(:event_subscription) do
-      #   EventSubscription.create(token: token,
-      #                            user: user,
-      #                            package: package,
-      #                            receiver_role: 'reader',
-      #                            payload: { scm: 'github', workflow_filters: workflow_filters },
-      #                            eventtype: 'Event::BuildSuccess',
-      #                            channel: :scm)
-      # end
+    context 'when the event subscription payload contains filters' do
+      let(:event_subscription) do
+        EventSubscription.create(token: token,
+                                 user: user,
+                                 package: package,
+                                 receiver_role: 'reader',
+                                 payload: { scm: 'github', workflow_filters: workflow_filters },
+                                 eventtype: 'Event::BuildSuccess',
+                                 channel: :scm)
+      end
 
       before do
         event
         event_subscription
       end
 
-      context 'architecture' do
+
+      # architecture => inclusion (which could match/not match on the arch) && exclusion
+
+      # architecture
+          # only
+              # matching
+              # not matching
+          # ignore
+              # matching
+              # not matching
+
+      # repositories
+          # only
+              # matching
+              # not matching
+          # ignore
+              # matching
+              # not matching
+
+
+
+      context 'which filter out the architectures of the event' do
         let(:workflow_filters) do
           { architectures: { only: ['i586'] } }
         end
 
-        let(:event_subscription) do
-          EventSubscription.create(token: token,
-                                   user: user,
-                                   package: package,
-                                   receiver_role: 'reader',
-                                   payload: { scm: 'github', workflow_filters: workflow_filters },
-                                   eventtype: 'Event::BuildSuccess',
-                                   channel: :scm)
-        end
-        let(:event) { Event::BuildSuccess.create(project: project.name, package: package.name, repository: repository.name, arch: "x86_64", reason: 'foo') }
+        let(:event) { Event::BuildSuccess.create(project: project.name, package: package.name, repository: 'openSUSE_Tumbleweed', arch: 'x86_64', reason: 'foo') }
 
         it_behaves_like 'the job performed'
         it_behaves_like 'not reporting to the SCM'
       end
 
-      context 'repositories' do
+      context 'matching the repositories of the event' do
+        let(:workflow_filters) do
+          { repositories: { ignore: ['openSUSE_Tumbleweed'] } }
+        end
+
+        let(:event) { Event::BuildSuccess.create(project: project.name, package: package.name, repository: 'openSUSE_Tumbleweed', arch: 'x86_64', reason: 'foo') }
+
+        it_behaves_like 'the job performed'
+        it_behaves_like 'not reporting to the SCM'
       end
 
-      context 'architectures and repositories' do
+      context 'matching architectures and repositories of the event' do
+        let(:workflow_filters) do
+          { repositories: { only: ['openSUSE_Tumbleweed'] }, architectures: { ignore: ['x86_64'] } }
+        end
+
+        let(:event) { Event::BuildSuccess.create(project: project.name, package: package.name, repository: 'openSUSE_Tumbleweed', arch: 'x86_64', reason: 'foo') }
+
+        it_behaves_like 'the job performed'
+        it_behaves_like 'not reporting to the SCM'
+      end
+
+      context 'not matching the architectures of the event' do
+        let(:workflow_filters) do
+          { architectures: { ignore: ['i586'] } }
+        end
+
+        let(:event) { Event::BuildSuccess.create(project: project.name, package: package.name, repository: 'openSUSE_Tumbleweed', arch: 'x86_64', reason: 'foo') }
+
+        it_behaves_like 'the job performed'
+        it_behaves_like 'reports to the SCM'
+      end
+
+      context 'not matching the repositories of the event' do
+        let(:workflow_filters) do
+          { repositories: { only: ['openSUSE_Tumbleweed'] } }
+        end
+
+        let(:event) { Event::BuildSuccess.create(project: project.name, package: package.name, repository: 'openSUSE_Tumbleweed', arch: 'x86_64', reason: 'foo') }
+
+        it_behaves_like 'the job performed'
+        it_behaves_like 'reports to the SCM'
+      end
+
+      context 'not matching architectures and repositories' do
+        let(:workflow_filters) do
+          { repositories: { ignore: ['Unicorn_123', 'CentOS'] }, architectures: { ignore: ['ppc', 'aarch64'] } }
+        end
+
+        let(:event) { Event::BuildSuccess.create(project: project.name, package: package.name, repository: 'openSUSE_Tumbleweed', arch: 'x86_64', reason: 'foo') }
+
+        it_behaves_like 'the job performed'
+        it_behaves_like 'reports to the SCM'
       end
     end
   end
