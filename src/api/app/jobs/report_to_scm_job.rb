@@ -17,9 +17,9 @@ class ReportToScmJob < CreateJob
     EventSubscriptionsFinder.new
                             .for_scm_channel_with_token(event_type: event_type, event_package: event_package)
                             .each do |event_subscription|
-      workflow_filters = event_subscription.payload[:workflow_filters]
+      workflow_filters = event_subscription.payload.with_indifferent_access[:workflow_filters]
 
-      if report_for_repository?(event.payload['repository'], workflow_filters) && report_for_architecture?(event.payload['architecture'], workflow_filters)
+      if workflow_filters.blank? || (report_for_repository?(event.payload['repository'], workflow_filters[:repositories]) && report_for_architecture?(event.payload['arch'], workflow_filters[:architectures]))
         SCMStatusReporter.new(event.payload,
                               event_subscription.payload,
                               event_subscription.token.scm_token,
@@ -32,22 +32,22 @@ class ReportToScmJob < CreateJob
 
   private
 
-  def report_for_repository?(event_repository, filters)
-    return true if filters.blank?
+  def report_for_repository?(event_repository, repository_filters)
+    return true if repository_filters.blank?
 
-    return true if filters[:repositories][:only]&.include?(event_repository)
+    return true if repository_filters[:only]&.include?(event_repository)
 
-    return true if filters[:repositories][:ignore]&.exclude?(event_repository)
+    return true if repository_filters[:ignore]&.exclude?(event_repository)
 
     false
   end
 
-  def report_for_architecture?(event_architecture, filters)
-    return true if filters.blank?
+  def report_for_architecture?(event_architecture, architecture_filters)
+    return true if architecture_filters.blank?
 
-    return true if filters[:architectures][:only]&.include?(event_architecture)
+    return true if architecture_filters[:only]&.include?(event_architecture)
 
-    return true if filters[:architectures][:ignore]&.exclude?(event_architecture)
+    return true if architecture_filters[:ignore]&.exclude?(event_architecture)
 
     false
   end
