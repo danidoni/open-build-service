@@ -162,6 +162,7 @@ RSpec.describe Workflow::Step::BranchPackageStep, vcr: true do
     it { expect { subject.call }.to(change(EventSubscription, :count).from(0).to(2)) }
   end
 
+  # TODO: convert it to validator
   describe '#allowed_event_and_action?' do
     let(:step_instructions) { {} }
 

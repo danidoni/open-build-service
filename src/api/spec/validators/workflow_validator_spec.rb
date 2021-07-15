@@ -1,8 +1,18 @@
 require "rails_helper"
 
-RSpec.describe WorkflowValidation do
+RSpec.describe WorkflowValidator do
+  let!(:user) { create(:confirmed_user, :with_home, login: 'Iggy') }
+  let(:token) { create(:workflow_token, user: user) }
+  let(:workflow) { create() }
 
-  describe '#allowed_event_and_action?' do
+  subject do
+    described_class.new.validate
+    described_class.new(step_instructions: step_instructions,
+                        scm_extractor_payload: scm_extractor_payload,
+                        token: token)
+  end
+
+  describe '#validate' do
     let(:step_instructions) { {} }
 
     context 'when we feed a valid extractor payload from GitHub' do

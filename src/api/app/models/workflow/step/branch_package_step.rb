@@ -3,6 +3,7 @@
 class Workflow
   module Step
     class BranchPackageStep
+      # TODO: check if ActiveModel::Validations is enough
       include ActiveModel::Model
 
       validates :source_project_name, :source_package_name, presence: true
