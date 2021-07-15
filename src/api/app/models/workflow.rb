@@ -39,19 +39,19 @@ class Workflow
     filters
   end
 
-  private
-
   def workflow_steps
-    @workflow.fetch('steps', {})
+    workflow.fetch('steps', {})
   end
+
+  private
 
   def initialize_step(step_name, step_instructions)
     SUPPORTED_STEPS[step_name].new(step_instructions: step_instructions,
-                                   scm_extractor_payload: @scm_extractor_payload,
-                                   token: @token)
+                                   scm_extractor_payload: scm_extractor_payload,
+                                   token: token)
   end
 
   def supported_filters
-    @supported_filters ||= @workflow[:filters]&.select { |key, _value| SUPPORTED_FILTERS.include?(key.to_sym) }
+    @supported_filters ||= workflow[:filters]&.select { |key, _value| SUPPORTED_FILTERS.include?(key.to_sym) }
   end
 end
