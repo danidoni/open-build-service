@@ -8,6 +8,8 @@ class Workflow
 
   attr_accessor :workflow, :scm_extractor_payload, :token
 
+  # TODO: Include our 3 new ActiveModel::Validator
+
   def steps
     @steps ||= workflow_steps.each_with_object([]) do |step_definition, acc|
       step_definition

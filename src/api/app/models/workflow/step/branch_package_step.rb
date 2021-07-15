@@ -3,19 +3,20 @@
 class Workflow
   module Step
     class BranchPackageStep
-      # TODO: check if ActiveModel::Validations is enough
       include ActiveModel::Model
 
       validates :source_project_name, :source_package_name, presence: true
 
+      # TODO: Use attr_accessor :token, etc.... so we can get rid of this initialize
       def initialize(step_instructions:, scm_extractor_payload:, token:)
         @step_instructions = step_instructions.with_indifferent_access
         @scm_extractor_payload = scm_extractor_payload.with_indifferent_access
         @token = token
       end
 
+      # TODO: Remove this
       def allowed_event_and_action?
-        workflow_validator = WorkflowValidator.new(scm_extractor_payload: @scm_extractor_payload)
+        workflow_validator = WorkflowEventAndActionValidator.new(scm_extractor_payload: @scm_extractor_payload)
         workflow_validator.send(:new_pull_request?) || workflow_validator.updated_pull_request?
       end
 
@@ -159,7 +160,7 @@ class Workflow
         end
       end
 
-      # TODO: This could be in a query object
+      # TODO: This could be in a query object. Ask Lukas, he started to work on this
       def workflow_repositories(target_project_name, filters)
         repositories = Project.get_by_name(target_project_name).repositories
         return repositories if filters.blank?
@@ -171,7 +172,7 @@ class Workflow
         repositories
       end
 
-      # TODO: This could be in a query object
+      # TODO: This could be in a query object. Ask Lukas, he started to work on this
       def workflow_architectures(repository, filters)
         architectures = repository.architectures
         return architectures if filters.blank?

@@ -1,6 +1,5 @@
 class WorkflowEventAndActionValidator < ActiveModel::Validator
-
-  def initialize(options)
+  def initialize(options = {})
     super
     @scm_extractor_payload = options[:scm_extractor_payload]
   end
@@ -8,6 +7,7 @@ class WorkflowEventAndActionValidator < ActiveModel::Validator
   def validate(record)
     @scm_extractor_payload = record.scm_extractor_payload
     @workflow = record
+
     valid_event_and_action?
   end
 
@@ -19,9 +19,7 @@ class WorkflowEventAndActionValidator < ActiveModel::Validator
   private
 
   def valid_event_and_action?
-    unless new_pull_request? || updated_pull_request?
-      @workflow.errors.add(:base, 'Event or Action not supported.')
-    end
+    @workflow.errors.add(:base, 'Event or Action not supported.') if !new_pull_request? && !updated_pull_request?
   end
 
   def github_pull_request?
