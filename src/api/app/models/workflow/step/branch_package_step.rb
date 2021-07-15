@@ -14,7 +14,8 @@ class Workflow
       end
 
       def allowed_event_and_action?
-        new_pull_request? || updated_pull_request?
+        workflow_validator = WorkflowValidator.new(scm_extractor_payload: @scm_extractor_payload)
+        workflow_validator.send(:new_pull_request?) || workflow_validator.updated_pull_request?
       end
 
       def call(options = {})
@@ -65,7 +66,7 @@ class Workflow
       end
 
       def find_or_create_branched_package
-        return target_package if updated_pull_request? && target_package.present?
+        return target_package if WorkflowValidator.new(scm_extractor_payload: @scm_extractor_payload).updated_pull_request? && target_package.present?
 
         branch
       end
@@ -110,24 +111,6 @@ class Workflow
                                     user: @token.user.login)
 
         target_package
-      end
-
-      def github_pull_request?
-        @scm_extractor_payload[:scm] == 'github' && @scm_extractor_payload[:event] == 'pull_request'
-      end
-
-      def gitlab_merge_request?
-        @scm_extractor_payload[:scm] == 'gitlab' && @scm_extractor_payload[:event] == 'Merge Request Hook'
-      end
-
-      def new_pull_request?
-        (github_pull_request? && @scm_extractor_payload[:action] == 'opened') ||
-          (gitlab_merge_request? && @scm_extractor_payload[:action] == 'open')
-      end
-
-      def updated_pull_request?
-        (github_pull_request? && @scm_extractor_payload[:action] == 'synchronize') ||
-          (gitlab_merge_request? && @scm_extractor_payload[:action] == 'update')
       end
 
       def add_or_update_branch_request_file(package:)
