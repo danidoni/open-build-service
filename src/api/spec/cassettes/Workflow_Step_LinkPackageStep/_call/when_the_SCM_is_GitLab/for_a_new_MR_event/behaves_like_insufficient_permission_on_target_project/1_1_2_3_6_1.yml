@@ -39,15 +39,15 @@ http_interactions:
           <description></description>
           <person userid="Iggy" role="maintainer"/>
         </project>
-  recorded_at: Thu, 23 Sep 2021 13:02:45 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:43 GMT
 - request:
     method: put
-    uri: http://backend:5352/source/foo_project/_meta?user=user_87
+    uri: http://backend:5352/source/foo_project/_meta?user=user_85
     body:
       encoding: UTF-8
       string: |
         <project name="foo_project">
-          <title>The Glory and the Dream</title>
+          <title>This Lime Tree Bower</title>
           <description/>
           <person userid="Iggy" role="maintainer"/>
         </project>
@@ -70,25 +70,25 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '155'
+      - '152'
     body:
       encoding: UTF-8
       string: |
         <project name="foo_project">
-          <title>The Glory and the Dream</title>
+          <title>This Lime Tree Bower</title>
           <description></description>
           <person userid="Iggy" role="maintainer"/>
         </project>
-  recorded_at: Thu, 23 Sep 2021 13:02:45 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:43 GMT
 - request:
     method: put
-    uri: http://backend:5352/source/foo_project/bar_package/_meta?user=user_88
+    uri: http://backend:5352/source/foo_project/bar_package/_meta?user=user_86
     body:
       encoding: UTF-8
       string: |
         <package name="bar_package" project="foo_project">
-          <title>Time To Murder And Create</title>
-          <description>Impedit quis itaque voluptate.</description>
+          <title>Arms and the Man</title>
+          <description>Et doloribus pariatur iusto.</description>
         </package>
     headers:
       Accept-Encoding:
@@ -109,21 +109,21 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '165'
+      - '154'
     body:
       encoding: UTF-8
       string: |
         <package name="bar_package" project="foo_project">
-          <title>Time To Murder And Create</title>
-          <description>Impedit quis itaque voluptate.</description>
+          <title>Arms and the Man</title>
+          <description>Et doloribus pariatur iusto.</description>
         </package>
-  recorded_at: Thu, 23 Sep 2021 13:02:45 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:43 GMT
 - request:
     method: put
     uri: http://backend:5352/source/foo_project/bar_package/_config
     body:
       encoding: UTF-8
-      string: Culpa et sequi. Ducimus voluptate minus. Maiores similique fuga.
+      string: Id est consequatur. Et aspernatur eum. Aut velit voluptatem.
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -147,21 +147,21 @@ http_interactions:
     body:
       encoding: UTF-8
       string: |
-        <revision rev="103" vrev="103">
-          <srcmd5>85d8297493b52c70487f32043505eb4d</srcmd5>
+        <revision rev="101" vrev="101">
+          <srcmd5>357dc2483a358dcfc880b2cf82b3c5b8</srcmd5>
           <version>unknown</version>
-          <time>1632402165</time>
+          <time>1632402163</time>
           <user>unknown</user>
           <comment></comment>
           <requestid/>
         </revision>
-  recorded_at: Thu, 23 Sep 2021 13:02:45 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:44 GMT
 - request:
     method: put
     uri: http://backend:5352/source/foo_project/bar_package/somefile.txt
     body:
       encoding: UTF-8
-      string: Aut dolorem nisi. Facere alias porro. Minima iusto ea.
+      string: Fuga nostrum quaerat. Omnis rem delectus. Officia ipsa sequi.
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -185,13 +185,51 @@ http_interactions:
     body:
       encoding: UTF-8
       string: |
-        <revision rev="104" vrev="104">
-          <srcmd5>2246090b28f183d1f30cd6387606b302</srcmd5>
+        <revision rev="102" vrev="102">
+          <srcmd5>eba83ebc955850cdde4490f18aa3e8a4</srcmd5>
           <version>unknown</version>
-          <time>1632402165</time>
+          <time>1632402164</time>
           <user>unknown</user>
           <comment></comment>
           <requestid/>
         </revision>
-  recorded_at: Thu, 23 Sep 2021 13:02:46 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:44 GMT
+- request:
+    method: put
+    uri: http://backend:5352/source/target_project_no_permission/_meta?user=Iggy
+    body:
+      encoding: UTF-8
+      string: |
+        <project name="target_project_no_permission">
+          <title>The Needle's Eye</title>
+          <description/>
+        </project>
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/xml
+      Cache-Control:
+      - no-cache
+      Connection:
+      - close
+      Content-Length:
+      - '121'
+    body:
+      encoding: UTF-8
+      string: |
+        <project name="target_project_no_permission">
+          <title>The Needle's Eye</title>
+          <description></description>
+        </project>
+  recorded_at: Thu, 23 Sep 2021 13:02:44 GMT
 recorded_with: VCR 6.0.0

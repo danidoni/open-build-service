@@ -39,15 +39,15 @@ http_interactions:
           <description></description>
           <person userid="Iggy" role="maintainer"/>
         </project>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:57 GMT
 - request:
     method: put
-    uri: http://backend:5352/source/foo_project/_meta?user=user_63
+    uri: http://backend:5352/source/foo_project/_meta?user=user_95
     body:
       encoding: UTF-8
       string: |
         <project name="foo_project">
-          <title>The Proper Study</title>
+          <title>Sleep the Brave</title>
           <description/>
           <person userid="Iggy" role="maintainer"/>
         </project>
@@ -70,25 +70,25 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '148'
+      - '147'
     body:
       encoding: UTF-8
       string: |
         <project name="foo_project">
-          <title>The Proper Study</title>
+          <title>Sleep the Brave</title>
           <description></description>
           <person userid="Iggy" role="maintainer"/>
         </project>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:57 GMT
 - request:
     method: put
-    uri: http://backend:5352/source/foo_project/bar_package/_meta?user=user_64
+    uri: http://backend:5352/source/foo_project/bar_package/_meta?user=user_96
     body:
       encoding: UTF-8
       string: |
         <package name="bar_package" project="foo_project">
-          <title>All Passion Spent</title>
-          <description>Accusantium rerum et dicta.</description>
+          <title>A Catskill Eagle</title>
+          <description>Libero voluptates quia est.</description>
         </package>
     headers:
       Accept-Encoding:
@@ -109,21 +109,21 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '154'
+      - '153'
     body:
       encoding: UTF-8
       string: |
         <package name="bar_package" project="foo_project">
-          <title>All Passion Spent</title>
-          <description>Accusantium rerum et dicta.</description>
+          <title>A Catskill Eagle</title>
+          <description>Libero voluptates quia est.</description>
         </package>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:57 GMT
 - request:
     method: put
     uri: http://backend:5352/source/foo_project/bar_package/_config
     body:
       encoding: UTF-8
-      string: Qui voluptatem voluptatum. Beatae sint eum. Corporis officiis maxime.
+      string: Facilis sunt adipisci. Non aliquid necessitatibus. Rerum sequi id.
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -147,21 +147,21 @@ http_interactions:
     body:
       encoding: UTF-8
       string: |
-        <revision rev="159" vrev="159">
-          <srcmd5>9b4df056337b78ca6def0c4ac80fde4b</srcmd5>
+        <revision rev="111" vrev="111">
+          <srcmd5>6471aa4ba75d1d0930b57b7a60f9e06e</srcmd5>
           <version>unknown</version>
-          <time>1632312042</time>
+          <time>1632402177</time>
           <user>unknown</user>
           <comment></comment>
           <requestid/>
         </revision>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:58 GMT
 - request:
     method: put
     uri: http://backend:5352/source/foo_project/bar_package/somefile.txt
     body:
       encoding: UTF-8
-      string: Porro itaque dolores. Non quae voluptatum. Consequatur aut quia.
+      string: Dolores minus est. Voluptatem quod ex. Itaque dolor enim.
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -185,15 +185,15 @@ http_interactions:
     body:
       encoding: UTF-8
       string: |
-        <revision rev="160" vrev="160">
-          <srcmd5>d14e0c9181ba6e98a56086e330d54965</srcmd5>
+        <revision rev="112" vrev="112">
+          <srcmd5>103410e226ddc65d5f9752fd211f81dd</srcmd5>
           <version>unknown</version>
-          <time>1632312042</time>
+          <time>1632402178</time>
           <user>unknown</user>
           <comment></comment>
           <requestid/>
         </revision>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:58 GMT
 - request:
     method: put
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/_meta?user=Iggy
@@ -233,7 +233,7 @@ http_interactions:
           <description></description>
           <person userid="Iggy" role="maintainer"/>
         </project>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:58 GMT
 - request:
     method: put
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package/_meta?user=Iggy
@@ -271,7 +271,7 @@ http_interactions:
           <title></title>
           <description></description>
         </package>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:58 GMT
 - request:
     method: put
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/_project/_meta?user=Iggy
@@ -309,7 +309,7 @@ http_interactions:
           <title></title>
           <description></description>
         </package>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:58 GMT
 - request:
     method: put
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/_project/_service?user=Iggy
@@ -342,14 +342,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: |
-        <revision rev="17">
+        <revision rev="19">
           <srcmd5>58ae26056fd970c7f7c9bad137b6665e</srcmd5>
-          <time>1632312042</time>
+          <time>1632402178</time>
           <user>Iggy</user>
           <comment></comment>
           <requestid/>
         </revision>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:58 GMT
 - request:
     method: put
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package/_link?user=Iggy
@@ -375,19 +375,19 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '208'
+      - '206'
     body:
       encoding: UTF-8
       string: |
-        <revision rev="131" vrev="131">
-          <srcmd5>818dea47109fefe278d066080e114d2a</srcmd5>
+        <revision rev="89" vrev="89">
+          <srcmd5>b475a370d2489ca1f02e75f9d585d4cf</srcmd5>
           <version>unknown</version>
-          <time>1632312042</time>
+          <time>1632402178</time>
           <user>Iggy</user>
           <comment></comment>
           <requestid/>
         </revision>
-  recorded_at: Wed, 22 Sep 2021 12:00:42 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 - request:
     method: put
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package/_branch_request?user=Iggy
@@ -413,19 +413,19 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '208'
+      - '206'
     body:
       encoding: UTF-8
       string: |
-        <revision rev="132" vrev="132">
-          <srcmd5>b410c3b64fbdb5bfad00a76eac3e2948</srcmd5>
+        <revision rev="90" vrev="90">
+          <srcmd5>6bfede603c81c567fcfc2daaa699c7ec</srcmd5>
           <version>unknown</version>
-          <time>1632312042</time>
+          <time>1632402179</time>
           <user>Iggy</user>
           <comment></comment>
           <requestid/>
         </revision>
-  recorded_at: Wed, 22 Sep 2021 12:00:43 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 - request:
     method: put
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package/_meta?user=Iggy
@@ -463,7 +463,7 @@ http_interactions:
           <title></title>
           <description></description>
         </package>
-  recorded_at: Wed, 22 Sep 2021 12:00:43 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 - request:
     method: get
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package
@@ -489,19 +489,19 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '758'
+      - '711'
     body:
       encoding: UTF-8
       string: |
-        <directory name="bar_package" rev="132" vrev="132" srcmd5="b410c3b64fbdb5bfad00a76eac3e2948">
-          <linkinfo project="foo_project" package="bar_package" srcmd5="d14e0c9181ba6e98a56086e330d54965" xsrcmd5="8e3bef510d607be1a3dadb5f9f15daff" lsrcmd5="b410c3b64fbdb5bfad00a76eac3e2948"/>
-          <serviceinfo code="succeeded" xsrcmd5="aff40466953b166da969eafc22914e93"/>
-          <entry name="_branch_request" md5="3604bb2fa00e7261df781f340c5e9ac1" size="104" mtime="1632311418"/>
-          <entry name="_config" md5="dc35eff31b258dbd751ff7fa363e9fa0" size="56" mtime="1632312037"/>
-          <entry name="_link" md5="858d6500f0ccc27f85ed9dc8c2006d8e" size="51" mtime="1632312011"/>
-          <entry name="somefile.txt" md5="4aedb32ada105a3d43ee60a6fe036e43" size="54" mtime="1632312037"/>
+        <directory name="bar_package" rev="90" vrev="90" srcmd5="6bfede603c81c567fcfc2daaa699c7ec">
+          <linkinfo project="foo_project" package="bar_package" srcmd5="103410e226ddc65d5f9752fd211f81dd" xsrcmd5="eb7578ab24702df4ac715757e8223621" lsrcmd5="6bfede603c81c567fcfc2daaa699c7ec"/>
+          <serviceinfo code="running"/>
+          <entry name="_branch_request" md5="3604bb2fa00e7261df781f340c5e9ac1" size="104" mtime="1632402155"/>
+          <entry name="_config" md5="2349c89686b265d7b3796455727d008f" size="60" mtime="1632402161"/>
+          <entry name="_link" md5="858d6500f0ccc27f85ed9dc8c2006d8e" size="51" mtime="1632402028"/>
+          <entry name="somefile.txt" md5="3b2e31db05a96d56f2fdb6d42f95c4a7" size="66" mtime="1632402162"/>
         </directory>
-  recorded_at: Wed, 22 Sep 2021 12:00:43 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 - request:
     method: get
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package?view=info
@@ -527,15 +527,14 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '332'
+      - '147'
     body:
       encoding: UTF-8
       string: |
-        <sourceinfo package="bar_package" rev="132" vrev="292" srcmd5="91bd8a9b99bce5955a68d0d2370614c5" lsrcmd5="aff40466953b166da969eafc22914e93" verifymd5="eed58ab10269985c4ae478f4a7bd5cf7">
-          <error>bad build configuration, no build type defined or detected</error>
-          <linked project="foo_project" package="bar_package"/>
+        <sourceinfo package="bar_package" rev="90" vrev="90" srcmd5="6bfede603c81c567fcfc2daaa699c7ec">
+          <error>service in progress</error>
         </sourceinfo>
-  recorded_at: Wed, 22 Sep 2021 12:00:43 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 - request:
     method: get
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package
@@ -561,19 +560,19 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '758'
+      - '711'
     body:
       encoding: UTF-8
       string: |
-        <directory name="bar_package" rev="132" vrev="132" srcmd5="b410c3b64fbdb5bfad00a76eac3e2948">
-          <linkinfo project="foo_project" package="bar_package" srcmd5="d14e0c9181ba6e98a56086e330d54965" xsrcmd5="8e3bef510d607be1a3dadb5f9f15daff" lsrcmd5="b410c3b64fbdb5bfad00a76eac3e2948"/>
-          <serviceinfo code="succeeded" xsrcmd5="aff40466953b166da969eafc22914e93"/>
-          <entry name="_branch_request" md5="3604bb2fa00e7261df781f340c5e9ac1" size="104" mtime="1632311418"/>
-          <entry name="_config" md5="dc35eff31b258dbd751ff7fa363e9fa0" size="56" mtime="1632312037"/>
-          <entry name="_link" md5="858d6500f0ccc27f85ed9dc8c2006d8e" size="51" mtime="1632312011"/>
-          <entry name="somefile.txt" md5="4aedb32ada105a3d43ee60a6fe036e43" size="54" mtime="1632312037"/>
+        <directory name="bar_package" rev="90" vrev="90" srcmd5="6bfede603c81c567fcfc2daaa699c7ec">
+          <linkinfo project="foo_project" package="bar_package" srcmd5="103410e226ddc65d5f9752fd211f81dd" xsrcmd5="eb7578ab24702df4ac715757e8223621" lsrcmd5="6bfede603c81c567fcfc2daaa699c7ec"/>
+          <serviceinfo code="running"/>
+          <entry name="_branch_request" md5="3604bb2fa00e7261df781f340c5e9ac1" size="104" mtime="1632402155"/>
+          <entry name="_config" md5="2349c89686b265d7b3796455727d008f" size="60" mtime="1632402161"/>
+          <entry name="_link" md5="858d6500f0ccc27f85ed9dc8c2006d8e" size="51" mtime="1632402028"/>
+          <entry name="somefile.txt" md5="3b2e31db05a96d56f2fdb6d42f95c4a7" size="66" mtime="1632402162"/>
         </directory>
-  recorded_at: Wed, 22 Sep 2021 12:00:43 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 - request:
     method: post
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package?cmd=diff&linkrev=base&onlyissues=1&orev=0&view=xml
@@ -601,18 +600,18 @@ http_interactions:
       Connection:
       - close
       Content-Length:
-      - '370'
+      - '369'
     body:
       encoding: UTF-8
       string: |
-        <sourcediff key="ce853bedf9fbb09b2b59f9d847071da7">
+        <sourcediff key="9526adae3a2637f2ccb846b2a518e7db">
           <old project="home:Iggy:openSUSE:open-build-service:PR-1" package="bar_package" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
-          <new project="home:Iggy:openSUSE:open-build-service:PR-1" package="bar_package" rev="132" srcmd5="b410c3b64fbdb5bfad00a76eac3e2948"/>
+          <new project="home:Iggy:openSUSE:open-build-service:PR-1" package="bar_package" rev="90" srcmd5="6bfede603c81c567fcfc2daaa699c7ec"/>
           <files/>
           <issues>
           </issues>
         </sourcediff>
-  recorded_at: Wed, 22 Sep 2021 12:00:43 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 - request:
     method: post
     uri: http://backend:5352/source/home:Iggy:openSUSE:open-build-service:PR-1/bar_package?cmd=linkdiff&linkrev=base&onlyissues=1&view=xml
@@ -644,12 +643,12 @@ http_interactions:
     body:
       encoding: UTF-8
       string: |
-        <sourcediff key="889676e4418ed07ba83e942739bcc5b9">
-          <old project="foo_project" package="bar_package" rev="d14e0c9181ba6e98a56086e330d54965" srcmd5="d14e0c9181ba6e98a56086e330d54965"/>
-          <new project="home:Iggy:openSUSE:open-build-service:PR-1" package="bar_package" rev="91bd8a9b99bce5955a68d0d2370614c5" srcmd5="91bd8a9b99bce5955a68d0d2370614c5"/>
+        <sourcediff key="7fb023bd4170fb7284bb8f5e570acb0b">
+          <old project="foo_project" package="bar_package" rev="103410e226ddc65d5f9752fd211f81dd" srcmd5="103410e226ddc65d5f9752fd211f81dd"/>
+          <new project="home:Iggy:openSUSE:open-build-service:PR-1" package="bar_package" rev="94fc7497283468dbde5b23961fe4e42d" srcmd5="94fc7497283468dbde5b23961fe4e42d"/>
           <files/>
           <issues>
           </issues>
         </sourcediff>
-  recorded_at: Wed, 22 Sep 2021 12:00:43 GMT
+  recorded_at: Thu, 23 Sep 2021 13:02:59 GMT
 recorded_with: VCR 6.0.0
