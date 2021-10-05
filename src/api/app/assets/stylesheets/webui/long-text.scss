@@ -1,17 +1,19 @@
-.scrollable-text {
-  overflow: auto;
-  white-space: nowrap;
-  padding: 0rem;
-  width: 100%;
-  display: inline-block;
-  /* This rules below make for a nice shadow to draw attention to the horizontally scrollable content */
-  background-image: linear-gradient(to right, white, white),
-    linear-gradient(to right, white, white),
-    linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0)),
-    linear-gradient(to left, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0));
-  background-position: left center, right center, left center, right center;
-  background-repeat: no-repeat;
-  background-color: white;
-  background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
-  background-attachment: local, local, scroll, scroll;
+.smart-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    position: relative;
+}
+a.ellipsis-link {
+    display: none;
+}
+.smart-overflow a.ellipsis-link {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 1.2em;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: underline;
 }
