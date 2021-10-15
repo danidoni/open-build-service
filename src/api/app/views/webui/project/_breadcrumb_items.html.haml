@@ -8,7 +8,7 @@
   %li.breadcrumb-item.active{ 'aria-current' => 'page' }
     = @namespace.nil? ? 'Create Project' : 'Create Subproject'
 - else
-  %li.breadcrumb-item.text-word-break-all
+  %li.breadcrumb-item.text-word-break-all.col.text-truncate
     %i.fa.fa-cubes
     = link_to @project, project_show_path(@project)
   - if current_page?(project_show_path(@project))

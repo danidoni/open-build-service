@@ -5,7 +5,7 @@
   %li.breadcrumb-item.active{ 'aria-current' => 'page' }
     Create Package
 - else
-  %li.breadcrumb-item.text-word-break-all
+  %li.breadcrumb-item.text-word-break-all.col.text-truncate
     %i.fa.fa-archive
     = link_to(@package, package_show_path(@project, @package))
   - if current_page?(package_view_revisions_path(@project, @package))
@@ -30,7 +30,7 @@
     %li.breadcrumb-item.active{ 'aria-current' => 'page' }
       Dependency
   - if current_page?(package_show_path(@project, @package))
-    %li.breadcrumb-item.active{ 'aria-current' => 'page' }
+    %li.breadcrumb-item.active.col-auto{ 'aria-current' => 'page' }
       Overview
   - if controller_name == 'package' && action_name == 'live_build_log'
     %li.breadcrumb-item.active{ 'aria-current' => 'page' }
@@ -43,3 +43,21 @@
   - if current_page?(package_view_file_path(@project, @package))
     %li.breadcrumb-item.active.text-word-break-all{ 'aria-current' => 'page' }
       = truncate(@filename, length: 50)
+
+:javascript
+//  truncateLongBreadcrumbItems();
+
+- content_for :ready_function do
+  :javascript
+    function truncateLongBreadcrumbItems() {
+      const max_link_length = 35;
+      const truncation_length = 10;
+      $('.breadcrumb-item > a').each(function(_, e) {
+        var link_text = e.text;
+        if (link_text.length > max_link_length) {
+          var truncated_text = link_text.substring(0, truncation_length).trim() + '...' + link_text.substring(link_text.length - truncation_length, link_text.length).trim();
+          e.text = truncated_text;
+        }
+      });
+    }
+    truncateLongBreadcrumbItems();

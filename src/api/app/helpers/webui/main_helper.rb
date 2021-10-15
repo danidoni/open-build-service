@@ -1,4 +1,7 @@
 module Webui::MainHelper
+  MAX_LENGTH = 35
+  SUBSTRING_LENGTH = 5
+
   def icon_for_status(message)
     case message.severity.to_sym
     when :green
@@ -11,6 +14,14 @@ module Webui::MainHelper
       { class: 'fa-bullhorn text-info', title: 'Announcement' }
     else
       { class: 'fa-info-circle text-info', title: 'Info' }
+    end
+  end
+
+  def truncate_in_the_middle(string)
+    if string.length > MAX_LENGTH
+      "#{string[0..SUBSTRING_LENGTH]}..#{string[string.length - SUBSTRING_LENGTH, string.length]}"
+    else
+      string
     end
   end
 end
