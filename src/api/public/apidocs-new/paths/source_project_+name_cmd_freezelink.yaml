@@ -1,0 +1,28 @@
+post:
+  summary: Freeze a project link.
+  description: |
+    Freeze a project link, either creating the freeze or updating it.
+    # FIXME: Improve description
+  security:
+    - basic_authentication: []
+  parameters:
+    - $ref: '../components/parameters/project_name.yaml'
+    - in: query
+      name: user
+      schema:
+        type: string
+      description: A user # FIXME: Improve description
+    - in: query
+      name: comment
+      schema:
+        type: string
+      description: A comment # FIXME: Improve description
+  responses:
+    '200':
+      $ref: '../components/responses/succeeded.yaml'
+    '401':
+      $ref: '../components/responses/unauthorized.yaml'
+    '404':
+      $ref: '../components/responses/unknown_project.yaml'
+  tags:
+    - Sources - Projects
