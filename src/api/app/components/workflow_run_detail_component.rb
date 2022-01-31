@@ -1,6 +1,6 @@
 class WorkflowRunDetailComponent < ApplicationComponent
   attr_reader :id, :request_headers, :pretty_request_payload,
-              :response_url, :response_body
+              :response_url, :response_body, :artifacts_per_step
 
   def initialize(workflow_run:)
     super
@@ -9,6 +9,7 @@ class WorkflowRunDetailComponent < ApplicationComponent
     @pretty_request_payload = parse_payload(workflow_run)
     @response_url = workflow_run.response_url
     @response_body = workflow_run.response_body
+    @artifacts_per_step = workflow_run.artifacts # collection of WorkflowArtifactsPerStep
   end
 
   private
