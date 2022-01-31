@@ -31,7 +31,7 @@ class Workflow
       restore_target_projects
     when scm_webhook.new_pull_request?, scm_webhook.updated_pull_request?, scm_webhook.push_event?, scm_webhook.tag_push_event?
       steps.each do |step|
-        step.call({ workflow_filters: filters })
+        step.call({ workflow_filters: filters }) && Workflows::ArtifactsCollector.new(step: step, workflow_run_id: workflow_run_id).call
       end
     end
   end
