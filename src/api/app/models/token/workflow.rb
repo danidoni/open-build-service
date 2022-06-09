@@ -3,8 +3,13 @@ class Token::Workflow < Token
                                        '#sec.obs.obs_scm_ci_workflow_integration.setup.token_authentication.how_to_authenticate_scm_with_obs').freeze
 
   has_many :workflow_runs, dependent: :destroy, foreign_key: 'token_id', inverse_of: false
-  has_many :workflow_token_users, dependent: :destroy, foreign_key: 'token_id'
-  has_many :shared_among, through: :workflow_token_users, source: :user
+  has_and_belongs_to_many :shared_among,
+                          class_name: 'User',
+                          join_table: :workflow_token_users,
+                          foreign_key: :token_id,
+                          association_foreign_key: :user_id,
+                          dependent: :destroy,
+                          inverse_of: :users
 
   validates :scm_token, presence: true
 

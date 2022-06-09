@@ -7,24 +7,22 @@ RSpec.describe Token::Workflow do
     context 'asking for workflow tokens' do
       let(:workflow_token) { create(:workflow_token, user: token_user) }
 
-      before { token_user.workflow_tokens << workflow_token }
+      before { token_user.shared_workflow_tokens << workflow_token }
 
       it 'returns the users whom I shared the token' do
         expect(workflow_token.shared_among).to include(token_user)
       end
     end
 
-    context 'asking for rss tokens' do
+    context 'trying to use rss tokens' do
       let(:rss_token) { create(:rss_token, user: token_user) }
 
-      before { token_user.workflow_tokens << rss_token }
-
       it 'returns nothing' do
-        expect(rss_token.shared_among).to be_empty
+        expect { token_user.shared_workflow_tokens << rss_token }.to raise_error(ActiveRecord::AssociationTypeMismatch)
       end
     end
   end
-  
+
   describe '#call' do
     let(:token_user) { create(:confirmed_user, :with_home, login: 'Iggy') }
     let(:workflow_token) { create(:workflow_token, user: token_user) }

@@ -38,7 +38,7 @@ RSpec.describe TokenPolicy, type: :policy do
       let!(:scope) { Token }
 
       before do
-        token_user.workflow_tokens << shared_workflow_token
+        token_user.shared_workflow_tokens << shared_workflow_token
       end
 
       it 'does not return rss tokens' do
