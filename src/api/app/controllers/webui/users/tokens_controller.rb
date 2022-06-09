@@ -45,7 +45,6 @@ class Webui::Users::TokensController < Webui::WebuiController
 
   def create
     @token = Token.token_type(@params[:type]).new(@params.except(:type).merge(user: User.session, package: @package))
-    User.session.workflow_tokens << @token if @params[:type] == 'workflow'
 
     authorize @token
 
