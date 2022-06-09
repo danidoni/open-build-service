@@ -17,6 +17,9 @@ class Token < ApplicationRecord
 
   include Token::Errors
 
+  scope :owned_tokens, ->(user) { where(user: user).where.not(type: ['Token::Rss']).includes(package: :project) }
+  scope :shared_tokens, ->(user) { user.workflow_tokens.where.not(type: ['Token::Rss']).includes(package: :project) }
+
   OPERATIONS = ['Rebuild', 'Release', 'Service', 'Workflow'].freeze
 
   def token_name

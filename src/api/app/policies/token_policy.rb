@@ -11,8 +11,7 @@ class TokenPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.where(user: user).where.not(type: ['Token::Rss', 'Token::Workflow']).includes(package: :project)
-      #TODO: Query Workflow Tokens through the WorkflowTokenUsers association
+      scope.owned_tokens(user) + scope.shared_tokens(user)
     end
   end
 
