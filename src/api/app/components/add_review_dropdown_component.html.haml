@@ -1,0 +1,28 @@
+.dropdown.text-right
+  .btn.btn-success.dropdown-toggle{ type: 'button', data: { toggle: 'dropdown'}, aria: { expanded: 'false' } }
+    Review
+  .dropdown-menu.dropdown-menu-right
+    - my_open_reviews.each_with_index do |review, index|
+      %a.dropdown-item
+      = link_to('javascript:void(0)', id: "toggle-review-in-place-#{review.id}", class: 'dropdown-item') do
+        - case
+        - when review.by_package
+          %i.fa.fa-archive
+          #{review.by_project}/#{review.by_package}
+        - when review.by_user
+          %i.fa.fa-user
+          #{review.by_user}
+        - when review.by_group
+          %i.fa.fa-users
+          #{review.by_group}
+        - when review.by_project
+          %i.fa.fa-cubes
+          #{review.by_project}
+      :javascript
+        $('#toggle-review-in-place-#{review.id}').on('click', function () {
+          const review_forms = document.querySelectorAll("[id^='add-review-in-place-']");
+          for(const review_form of review_forms) {
+            review_form.classList.add('d-none');
+          }
+          $('#add-review-in-place-#{review.id}').toggleClass('d-none');
+        });
