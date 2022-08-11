@@ -1,10 +1,17 @@
 .row
   .col-md-12#overview
-    .mb-4#description-text
-      - if bs_request.description.present?
-        = render partial: 'webui/shared/collapsible_text', locals: { text: bs_request.description }
-      - else
-        %i No description set
+    .row
+      .col-md-8.order-md-1.order-sm-2
+        .mb-4#description-text
+          - if bs_request.description.present?
+            = render partial: 'webui/shared/collapsible_text', locals: { text: bs_request.description }
+          - else
+            %i No description set
+      .col-md-4.order-md-2.order-sm-1.mb-4
+        = render AddReviewDropdownComponent.new(bs_request: @bs_request, user: User.session,
+                                                can_add_reviews: @can_add_reviews,
+                                                my_open_reviews: @my_open_reviews)
+        = render AddReviewInlineFormComponent.with_collection(my_open_reviews)
     .row
       .col-md-4.order-md-2.order-sm-1.mb-4#side-links
         - if accepted_reviews.present? || declined_reviews.present? || open_reviews.present?
@@ -28,7 +35,3 @@
           = render BsRequestActivityTimelineComponent.new(bs_request: bs_request)
         .comment_new.mt-3
           = render partial: 'webui/comment/new', locals: { commentable: bs_request }
-        = render AddReviewDropdownComponent.new(bs_request: @bs_request, user: User.session,
-                                                can_add_reviews: @can_add_reviews,
-                                                my_open_reviews: @my_open_reviews)
-        = render AddReviewInlineFormComponent.with_collection(my_open_reviews)
