@@ -8,11 +8,50 @@
     .row
       .col-md-4.order-md-2.order-sm-1.mb-4#side-links
         - if accepted_reviews.present? || declined_reviews.present? || open_reviews.present?
-          %h4.d-inline-block
-            Reviews
-          = render AddReviewComponent.new(bs_request: @bs_request, user: User.session,
-                                          can_add_reviews: @can_add_reviews,
-                                          my_open_reviews: @my_open_reviews)
+          .d-flex.justify-content-between
+            %h4
+              Reviews
+            = render AddReviewComponent.new(bs_request: @bs_request, user: User.session,
+                                            can_add_reviews: @can_add_reviews,
+                                            my_open_reviews: @my_open_reviews)
+
+          -# TODO: How does this all work with the collapse elements on mobile? Is it nice to use?
+          -# TODO: Decide how we proceed with the AddReviewComponent and the collapse element.
+                   They depend on each other, but the AddReviewComponent has to be rendered in the flex container, while the collapse elements need to be outside the flex container.
+          -# TODO: Define inline styles in some CSS file
+          .collapse.position-absolute.w-100.mt-2#decision_review_form_collapse{ style: 'padding: inherit; left: 0;' }
+            .card
+              .card-body
+                = render RequestDecisionComponent.new(bs_request: @bs_request, actions: @actions, is_target_maintainer: @is_target_maintainer, is_author: @is_author)
+
+          -# TODO: Define inline styles in some CSS file
+          .collapse.position-absolute.w-100.mt-2#review_form_collapse{ style: 'padding: inherit; left: 0;' }
+            .card
+              .card-body
+                %h5
+                  Add a review for
+                  %i
+                = form_tag(request_modify_review_path) do
+                  = hidden_field_tag('review_id')
+                  -# TODO: Do we need this?
+                  -# - if review.creator
+                  -#   .mt-4
+                  -#     %p
+                  -#       = helpers.user_with_realname_and_icon(User.find_by(login: review.creator))
+                  -#       requested:
+                  -#     .ml-4
+                  -#       %p= sanitize(simple_format(review.reason || 'No reason given'), tags: %w[br p])
+                  .form-group
+                    = text_area_tag('comment', '', rows: 4, class: 'w-100 form-control', placeholder: 'Please comment on your decision')
+                  .form-group
+                    .custom-control.custom-radio
+                      = radio_button_tag('new_state', 'Decline', true, class: 'custom-control-input')
+                      = label_tag('Decline', 'Decline', for: "new_state_Decline", class: 'custom-control-label')
+                    .custom-control.custom-radio
+                      = radio_button_tag('new_state', 'Approve', false, class: 'custom-control-input')
+                      = label_tag('Approve', 'Approve', for: "new_state_Approve", class: 'custom-control-label')
+                  = submit_tag 'Submit review', title: 'Veto this request, it will be declined.', class: 'btn btn-primary'
+
           .mb-4
             = render partial: 'webui/request/beta_show_tabs/review_summary', collection: accepted_reviews, as: :review
             = render partial: 'webui/request/beta_show_tabs/review_summary', collection: declined_reviews, as: :review

@@ -1,23 +1,12 @@
--# <div class="collapse" id="collapseExample">
--#   <div class="card card-body">
--#     Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
--#   </div>
--# </div>
-
--# <p>
--#   <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
--#     Link with href
--#   </a>
--#   <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
--#     Button with data-target
--#   </button>
--# </p>
-.dropdown
+.dropdown#add-review-component
   .btn.btn-success.dropdown-toggle{ type: 'button', data: { toggle: 'dropdown'}, aria: { expanded: 'false' } }
     Review
   .dropdown-menu.dropdown-menu-right
+    -# TODO: Render this depending on permissions
+    - if true
+      = button_tag('Decision', type: 'button', class: 'dropdown-item', data: { toggle: 'collapse', target: '#decision_review_form_collapse' },  aria: { expanded: 'false', controls: 'decision_review_form_collapse' })
     - @my_open_reviews.each_with_index do |review, index|
-      = button_tag(type: 'button', class: 'dropdown-item', data: { toggle: 'collapse', target: '#review_form_collapse' },  aria: { expanded: 'false', controls: 'review_form_collapse' }) do
+      = button_tag(type: 'button', class: 'dropdown-item', data: { toggle: 'collapse', target: '#review_form_collapse', review: review.id },  aria: { expanded: 'false', controls: 'review_form_collapse' }) do
         - case
         - when review.by_package
           %i.fa.fa-archive
@@ -31,45 +20,3 @@
         - when review.by_project
           %i.fa.fa-cubes
           #{review.by_project}
-
-
-.collapse.position-absolute#review_form_collapse
-  .card
-    .card-body
-      -# - case
-      -# - when review.by_package
-      -#   %h5 Add a review for package #{review.by_project}/#{review.by_package}
-      -# - when review.by_user
-      -#   %h5 Add a review for user #{review.by_user}
-      -# - when review.by_group
-      -#   %h5 Add a review for group #{review.by_group}
-      -# - when review.by_project
-      -#   %h5 Add a review for project #{review.by_project}
-      -# = form_for(review, url: request_modify_review_path, method: :post) do
-      -#   = hidden_field_tag('review_id', review.id)
-      -#   - if review.creator
-      -#     .mt-4
-      -#       %p
-      -#         = helpers.user_with_realname_and_icon(User.find_by(login: review.creator))
-      -#         requested:
-      -#       .ml-4
-      -#         %p= sanitize(simple_format(review.reason || 'No reason given'), tags: %w[br p])
-      -#   .form-group
-      -#     = text_area_tag('comment', '', rows: 4, class: 'w-100 form-control', placeholder: 'Please comment on your decision')
-      -#   .form-group
-      -#     .custom-control.custom-radio
-      -#       = radio_button_tag('new_state', 'Decline', true, class: 'custom-control-input')
-      -#       = label_tag('Decline', 'Decline', for: "new_state_Decline", class: 'custom-control-label')
-      -#     .custom-control.custom-radio
-      -#       = radio_button_tag('new_state', 'Approve', false, class: 'custom-control-input')
-      -#       = label_tag('Approve', 'Approve', for: "new_state_Approve", class: 'custom-control-label')
-      -#   -# .form-group
-      -#   -#   .btn-group.btn-group-toggle{ data: { toggle: 'buttons' } }
-      -#   -#     %label.btn.btn-success
-      -#   -#       = radio_button_tag('new_state', 'Approve', false)
-      -#   -#       Approve
-      -#   -#     %label.btn.btn-danger
-      -#   -#       = radio_button_tag('new_state', 'Decline', false)
-      -#   -#       Decline
-      -#   .form-group
-      -#     = submit_tag 'Submit review', title: 'Veto this request, it will be declined.', class: 'btn btn-primary'
