@@ -1,6 +1,4 @@
-class AddReviewDropdownComponent < ApplicationComponent
-  attr_accessor :can_add_reviews, :my_open_reviews
-
+class AddReviewComponent < ApplicationComponent
   def initialize(bs_request:, user:, can_add_reviews:, my_open_reviews:)
     super
 
@@ -11,6 +9,6 @@ class AddReviewDropdownComponent < ApplicationComponent
   end
 
   def render?
-    can_add_reviews && my_open_reviews.present?
+    @can_add_reviews && @my_open_reviews.present?
   end
 end
