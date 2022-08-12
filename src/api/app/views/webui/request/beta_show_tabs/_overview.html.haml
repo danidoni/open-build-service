@@ -11,33 +11,13 @@
           .d-flex.justify-content-between
             %h4
               Reviews
-            = render AddReviewComponent.new(bs_request: bs_request, user: User.session,
-                                            can_add_reviews: can_add_reviews,
-                                            my_open_reviews: my_open_reviews)
-
+            = render AddReviewDropdownComponent.new(bs_request: bs_request, user: User.session,
+                                                    can_add_reviews: can_add_reviews,
+                                                    my_open_reviews: my_open_reviews)
           -# TODO: How does this all work with the collapse elements on mobile? Is it nice to use?
           -# TODO: Decide how we proceed with the AddReviewComponent and the collapse element.
                    They depend on each other, but the AddReviewComponent has to be rendered in the flex container, while the collapse elements need to be outside the flex container.
-          -# TODO: Define inline styles in some CSS file
-          .collapse.position-absolute.w-100.mt-2#review_form_collapse{ style: 'padding: inherit; left: 0;' }
-            .card
-              .card-body
-                %h5
-                  Add a review for
-                  %i
-                = form_tag(request_modify_review_path) do
-                  = hidden_field_tag('review_id')
-                  .form-group
-                    = text_area_tag('comment', '', rows: 4, class: 'w-100 form-control', placeholder: 'Please comment on your decision')
-                  .form-group
-                    .custom-control.custom-radio
-                      = radio_button_tag('new_state', 'Decline', true, class: 'custom-control-input')
-                      = label_tag('Decline', 'Decline', for: "new_state_Decline", class: 'custom-control-label')
-                    .custom-control.custom-radio
-                      = radio_button_tag('new_state', 'Approve', false, class: 'custom-control-input')
-                      = label_tag('Approve', 'Approve', for: "new_state_Approve", class: 'custom-control-label')
-                  = submit_tag 'Submit review', title: 'Veto this request, it will be declined.', class: 'btn btn-primary'
-
+          = render AddReviewCollapsibleComponent.new
           .mb-4
             = render partial: 'webui/request/beta_show_tabs/review_summary', collection: accepted_reviews, as: :review
             = render partial: 'webui/request/beta_show_tabs/review_summary', collection: declined_reviews, as: :review
@@ -49,7 +29,6 @@
             - staging_project = review.project
             Is staged in
             = link_to(review.by_project, staging_workflow_staging_project_path(staging_project.staging_workflow.project, staging_project.name))
-
       .col-md-8.order-md-1.order-sm-2
         %h4.list-group.mb-4 Comments & Request History
         .comments-list{ data: { comment_counter: local_assigns[:comment_counter_id] } }

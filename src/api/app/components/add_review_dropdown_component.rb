@@ -1,4 +1,4 @@
-class AddReviewComponent < ApplicationComponent
+class AddReviewDropdownComponent < ApplicationComponent
   def initialize(bs_request:, user:, can_add_reviews:, my_open_reviews:)
     super
 
