@@ -6,10 +6,14 @@ $(document).ready(function(e) {
     $('#review_id').val(review.data('review'));
   });
 
+  $('#add-review-component').on('shown.bs.dropdown', function () {
+    $('#review_form_collapse').collapse('hide');
+  })
 });
 
 $(document).click(function(e) {
-	if (!$(e.target).is('#review_form_collapse')) {
+  const reviewCollapsible = document.getElementById('review_form_collapse');
+  if (!reviewCollapsible.contains(e.target)) {
     	$('.collapse').collapse('hide');
   }
 });
