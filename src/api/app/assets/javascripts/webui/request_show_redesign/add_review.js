@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function(e) {
   $('#add-review-component .dropdown-item').on('click', function(e) {
     const review = $(this);
 
@@ -6,6 +6,10 @@ $(document).ready(function() {
     $('#review_id').val(review.data('review'));
   });
 
-  // TODO: Hide collapse element when the other is displayed
-  //       like hide `review_form_collapse` when `decision_review_form_collapse` is shown and vice-versa
+});
+
+$(document).click(function(e) {
+	if (!$(e.target).is('#review_form_collapse')) {
+    	$('.collapse').collapse('hide');
+  }
 });

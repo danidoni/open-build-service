@@ -2,9 +2,6 @@
   .btn.btn-success.dropdown-toggle{ type: 'button', data: { toggle: 'dropdown'}, aria: { expanded: 'false' } }
     Review
   .dropdown-menu.dropdown-menu-right
-    -# TODO: Render this depending on permissions
-    - if true
-      = button_tag('Decision', type: 'button', class: 'dropdown-item', data: { toggle: 'collapse', target: '#decision_review_form_collapse' },  aria: { expanded: 'false', controls: 'decision_review_form_collapse' })
     - @my_open_reviews.each_with_index do |review, index|
       = button_tag(type: 'button', class: 'dropdown-item', data: { toggle: 'collapse', target: '#review_form_collapse', review: review.id },  aria: { expanded: 'false', controls: 'review_form_collapse' }) do
         - case

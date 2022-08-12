@@ -19,10 +19,6 @@
           -# TODO: Decide how we proceed with the AddReviewComponent and the collapse element.
                    They depend on each other, but the AddReviewComponent has to be rendered in the flex container, while the collapse elements need to be outside the flex container.
           -# TODO: Define inline styles in some CSS file
-          .collapse.position-absolute.w-100.mt-2#decision_review_form_collapse{ style: 'padding: inherit; left: 0;' }
-            .card
-              .card-body
-                = render RequestDecisionComponent.new(bs_request: @bs_request, actions: @actions, is_target_maintainer: @is_target_maintainer, is_author: @is_author)
 
           -# TODO: Define inline styles in some CSS file
           .collapse.position-absolute.w-100.mt-2#review_form_collapse{ style: 'padding: inherit; left: 0;' }
@@ -70,3 +66,5 @@
           = render BsRequestActivityTimelineComponent.new(bs_request: bs_request)
         .comment_new.mt-3
           = render partial: 'webui/comment/new', locals: { commentable: bs_request }
+        %hr
+        = render RequestDecisionComponent.new(bs_request: @bs_request, actions: @actions, is_target_maintainer: @is_target_maintainer, is_author: @is_author)
