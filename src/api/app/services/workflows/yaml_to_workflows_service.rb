@@ -19,13 +19,16 @@ module Workflows
     private
 
     def create_workflows
+      workflows_file_content = File.read(@yaml_file)
+      @workflow_run.update(workflow_configuration_yaml: workflows_file_content)
       begin
-        parsed_workflows_yaml = YAML.safe_load(parse_workflows_file(@yaml_file))
+        parsed_workflows_yaml = YAML.safe_load(parse_workflows_content(workflows_file_content))
       rescue Psych::SyntaxError, Token::Errors::WorkflowsYamlFormatError => e
         raise Token::Errors::WorkflowsYamlNotParsable, "Unable to parse #{@token.workflow_configuration_path}: #{e.message}"
       end
 
       parsed_workflows_yaml = extract_and_set_workflow_version(parsed_workflows_yaml: parsed_workflows_yaml)
+      @workflow_run.update(workflow_configuration_names: parsed_workflows_yaml.keys.join(','))
       parsed_workflows_yaml
         .map do |_workflow_name, workflow_instructions|
         Workflow.new(workflow_instructions: workflow_instructions, scm_webhook: @scm_webhook, token: @token,
@@ -33,7 +36,7 @@ module Workflows
       end
     end
 
-    def parse_workflows_file(file_path)
+    def parse_workflows_content(workflows_file_content)
       target_repository_full_name = @scm_webhook.payload.values_at(:target_repository_full_name, :path_with_namespace).compact.first
       scm_organization_name, scm_repository_name = target_repository_full_name.split('/')
 
@@ -43,7 +46,6 @@ module Workflows
 
       commit_sha = @scm_webhook.payload.fetch(:commit_sha)
 
-      workflows_file_content = File.read(file_path)
       track_placeholder_variables(workflows_file_content)
 
       # Mapping the placeholder variables to their values from the webhook event payload

@@ -124,19 +124,21 @@ end
 #
 # Table name: workflow_runs
 #
-#  id                          :integer          not null, primary key
-#  hook_event                  :string(255)
-#  request_headers             :text(65535)      not null
-#  request_payload             :text(4294967295) not null
-#  response_body               :text(65535)
-#  response_url                :string(255)
-#  scm_vendor                  :string(255)
-#  status                      :integer          default("running"), not null
-#  workflow_configuration_path :string(255)
-#  workflow_configuration_url  :string(255)
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  token_id                    :integer          not null, indexed
+#  id                           :integer          not null, primary key
+#  hook_event                   :string(255)
+#  request_headers              :text(65535)      not null
+#  request_payload              :text(4294967295) not null
+#  response_body                :text(65535)
+#  response_url                 :string(255)
+#  scm_vendor                   :string(255)
+#  status                       :integer          default("running"), not null
+#  workflow_configuration_names :string(255)
+#  workflow_configuration_path  :string(255)
+#  workflow_configuration_url   :string(255)
+#  workflow_configuration_yaml  :text(65535)
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  token_id                     :integer          not null, indexed
 #
 # Indexes
 #
