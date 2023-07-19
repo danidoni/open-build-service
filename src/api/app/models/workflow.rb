@@ -8,12 +8,14 @@ class Workflow
   SUPPORTED_STEPS = {
     branch_package: Workflow::Step::BranchPackageStep, link_package: Workflow::Step::LinkPackageStep,
     configure_repositories: Workflow::Step::ConfigureRepositories, rebuild_package: Workflow::Step::RebuildPackage,
-    set_flags: Workflow::Step::SetFlags, trigger_services: Workflow::Step::TriggerServices
+    set_flags: Workflow::Step::SetFlags, trigger_services: Workflow::Step::TriggerServices,
+    submit_request: Workflow::Step::SubmitRequest
   }.freeze
 
   SUPPORTED_FILTERS = [:branches, :event].freeze
   STEPS_WITH_NO_TARGET_PROJECT_TO_RESTORE_OR_DESTROY = [Workflow::Step::ConfigureRepositories, Workflow::Step::RebuildPackage,
-                                                        Workflow::Step::SetFlags, Workflow::Step::TriggerServices].freeze
+                                                        Workflow::Step::SetFlags, Workflow::Step::TriggerServices,
+                                                        Workflow::Step::SubmitRequest ].freeze
 
   attr_accessor :workflow_instructions, :scm_webhook, :token, :workflow_run, :workflow_version_number
 
@@ -35,13 +37,17 @@ class Workflow
       return unless event_matches_event_filter?
       return unless branch_matches_branches_filter?
 
-      case
-      when scm_webhook.closed_merged_pull_request?
-        destroy_target_projects
-      when scm_webhook.reopened_pull_request?
-        restore_target_projects
-      when scm_webhook.new_pull_request?, scm_webhook.updated_pull_request?, scm_webhook.push_event?, scm_webhook.tag_push_event?
-        steps.each do |step|
+      steps.each do |step|
+        case
+        when (step.is_a? Workflow::Step::SubmitRequest)
+          # We check inside the Step::SubmitRequest what to do based on the
+          # event, so we always call the step
+          call_step_and_collect_artifacts(step)
+        when scm_webhook.closed_merged_pull_request?
+          destroy_target_projects
+        when scm_webhook.reopened_pull_request?
+          restore_target_projects
+        when scm_webhook.new_pull_request?, scm_webhook.updated_pull_request?, scm_webhook.push_event?, scm_webhook.tag_push_event?
           call_step_and_collect_artifacts(step)
         end
       end
