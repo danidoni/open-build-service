@@ -42,7 +42,7 @@ class Workflow
         when (step.is_a? Workflow::Step::SubmitRequest)
           # We check inside the Step::SubmitRequest what to do based on the
           # event, so we always call the step
-          call_step_and_collect_artifacts(step)
+          step.call
         when scm_webhook.closed_merged_pull_request?
           destroy_target_projects
         when scm_webhook.reopened_pull_request?
