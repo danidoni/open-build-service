@@ -15,7 +15,7 @@ class Workflow
   SUPPORTED_FILTERS = [:branches, :event].freeze
   STEPS_WITH_NO_TARGET_PROJECT_TO_RESTORE_OR_DESTROY = [Workflow::Step::ConfigureRepositories, Workflow::Step::RebuildPackage,
                                                         Workflow::Step::SetFlags, Workflow::Step::TriggerServices,
-                                                        Workflow::Step::SubmitRequest ].freeze
+                                                        Workflow::Step::SubmitRequest].freeze
 
   attr_accessor :workflow_instructions, :scm_webhook, :token, :workflow_run, :workflow_version_number
 
@@ -39,7 +39,7 @@ class Workflow
 
       steps.each do |step|
         case
-        when (step.is_a? Workflow::Step::SubmitRequest)
+        when step.is_a?(Workflow::Step::SubmitRequest)
           # We check inside the Step::SubmitRequest what to do based on the
           # event, so we always call the step
           step.call
