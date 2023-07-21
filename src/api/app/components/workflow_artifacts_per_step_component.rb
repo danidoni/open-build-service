@@ -10,6 +10,7 @@ class WorkflowArtifactsPerStepComponent < ApplicationComponent
     @artifacts = @artifacts_per_step.artifacts
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def call
     parsed_artifacts = JSON.parse(artifacts).deep_symbolize_keys
 
@@ -31,6 +32,7 @@ class WorkflowArtifactsPerStepComponent < ApplicationComponent
     Airbrake.notify(e, artifacts_per_step_id: artifacts_per_step.id)
     tag.li { concat("Could not display artifacts for #{step.split('::').last.titleize}") }
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   private
 
