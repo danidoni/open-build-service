@@ -52,7 +52,7 @@ class Workflow::Step::SubmitRequest < Workflow::Step
       raise e.summary
     end
 
-    create_or_update_subscriptions(bs_request: bs_request)
+    Workflows::ScmEventSubscriptionCreator.new(token, workflow_run, scm_webhook, bs_request).call
     (@request_numbers_and_state_for_artifacts["#{bs_request.state}"] ||= []) << bs_request.number
     bs_request
   end
@@ -102,17 +102,5 @@ class Workflow::Step::SubmitRequest < Workflow::Step
 
   def source_package_revision
     source_package.rev
-  end
-
-  def create_or_update_subscriptions(bs_request:)
-    subscription = EventSubscription.find_or_create_by!(eventtype: 'Event::RequestStatechange',
-                                                        receiver_role: 'reader', # We pass a valid value, but we don't need this.
-                                                        user: @token.executor,
-                                                        channel: 'scm',
-                                                        enabled: true,
-                                                        token: @token,
-                                                        workflow_run: workflow_run,
-                                                        bs_request: bs_request)
-    subscription.update!(payload: scm_webhook.payload)
   end
 end
