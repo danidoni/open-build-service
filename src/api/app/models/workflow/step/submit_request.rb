@@ -63,8 +63,6 @@ class Workflow::Step::SubmitRequest < Workflow::Step
     requests_to_be_superseded = submit_requests_with_same_target_and_source
     new_submit_request = submit_package
 
-    return if requests_to_be_superseded.blank?
-
     requests_to_be_superseded.each do |submit_request|
       # Authorization happens on model level
       request = BsRequest.find_by_number!(submit_request.number)
@@ -76,8 +74,6 @@ class Workflow::Step::SubmitRequest < Workflow::Step
   end
 
   def revoke_submit_requests
-    return if submit_requests_with_same_target_and_source.blank?
-
     submit_requests_with_same_target_and_source.each do |submit_request|
       next unless Pundit.authorize(@token.executor, submit_request, :revoke_request?)
 
