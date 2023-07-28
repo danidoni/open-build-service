@@ -22,6 +22,7 @@ class SCMStatusReporter
                                @scm_token,
                                @state,
                                @workflow_run,
+                               @event_type,
                                initial_report: @initial_report).call
     elsif gitlab?
       GitlabStatusReporter.new(@event_payload,
@@ -29,6 +30,7 @@ class SCMStatusReporter
                                @scm_token,
                                @state,
                                @workflow_run,
+                               @event_type,
                                initial_report: @initial_report).call
     elsif gitea?
       GiteaStatusReporter.new(@event_payload,
@@ -36,6 +38,7 @@ class SCMStatusReporter
                               @scm_token,
                               @state,
                               @workflow_run,
+                              @event_type,
                               initial_report: @initial_report).call
     end
   end
