@@ -39,18 +39,7 @@ class Workflow::Step::SubmitRequest < Workflow::Step
     bs_request = BsRequest.new(bs_request_actions: [bs_request_action],
                                description: bs_request_description)
     Pundit.authorize(@token.executor, bs_request, :create?)
-
-    begin
-      bs_request.save!
-    rescue MaintenanceHelper::MissingAction
-      raise 'Unable to submit, sources are unchanged'
-    rescue Project::Errors::UnknownObjectError
-      raise "Unable to submit: The source of package #{source_project_name}/#{source_package_name} is broken"
-    rescue APIError, ActiveRecord::RecordInvalid => e
-      raise e.message
-    rescue Backend::Error => e
-      raise e.summary
-    end
+    bs_request.save!
 
     Workflows::ScmEventSubscriptionCreator.new(token, workflow_run, scm_webhook, bs_request).call
     (@request_numbers_and_state_for_artifacts["#{bs_request.state}"] ||= []) << bs_request.number
@@ -92,8 +81,6 @@ class Workflow::Step::SubmitRequest < Workflow::Step
   def source_package
     Package.get_by_project_and_name(source_project_name, source_package_name, follow_multibuild: true)
   rescue Project::Errors::UnknownObjectError, Package::Errors::UnknownObjectError
-    # We rely on Package.get_by_project_and_name since it's the only way to work with multibuild packages.
-    raise "The source project or package '#{source_project_name}/#{source_package_name}' does not exist"
   end
 
   def source_package_revision
