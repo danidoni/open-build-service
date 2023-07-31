@@ -13,9 +13,6 @@ class Workflow
   }.freeze
 
   SUPPORTED_FILTERS = [:branches, :event].freeze
-  STEPS_WITH_NO_TARGET_PROJECT_TO_RESTORE_OR_DESTROY = [Workflow::Step::ConfigureRepositories, Workflow::Step::RebuildPackage,
-                                                        Workflow::Step::SetFlags, Workflow::Step::TriggerServices,
-                                                        Workflow::Step::SubmitRequest].freeze
 
   attr_accessor :workflow_instructions, :scm_webhook, :token, :workflow_run, :workflow_version_number
 
@@ -32,29 +29,15 @@ class Workflow
   validates_with WorkflowVersionValidator
   validate :event_supports_branches_filter?, on: :call, if: :event_matches_event_filter?
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def call
     run_callbacks(:call) do
       return unless event_matches_event_filter?
       return unless branch_matches_branches_filter?
 
-      steps.each do |step|
-        case
-        when step.is_a?(Workflow::Step::SubmitRequest)
-          # We check inside the Step::SubmitRequest what to do based on the
-          # event, so we always call the step
-          step.call
-        when scm_webhook.closed_merged_pull_request?
-          destroy_target_projects
-        when scm_webhook.reopened_pull_request?
-          restore_target_projects
-        when scm_webhook.new_pull_request?, scm_webhook.updated_pull_request?, scm_webhook.push_event?, scm_webhook.tag_push_event?
-          call_step_and_collect_artifacts(step)
-        end
+      call_step_and_collect_artifacts(step)
       end
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   def event_supports_branches_filter?
     # Tags do not have a reference to a branch, they are referring to a commit
@@ -133,32 +116,5 @@ class Workflow
     return true if branches_ignore.present? && branches_ignore.exclude?(scm_webhook.payload[:target_branch])
 
     false
-  end
-
-  # TODO: Extract this into a service
-  def destroy_target_projects
-    # Do not process steps for which there's nothing to do
-    processable_steps = steps.reject { |step| step.class.in?(STEPS_WITH_NO_TARGET_PROJECT_TO_RESTORE_OR_DESTROY) }
-    target_packages = processable_steps.map(&:target_package).uniq.compact
-    EventSubscription.where(channel: 'scm', token: token, package: target_packages).delete_all
-
-    target_project_names = processable_steps.map(&:target_project_name).uniq.compact
-
-    Project.where(name: target_project_names).destroy_all
-  end
-
-  # TODO: Extract this into a service
-  def restore_target_projects
-    token_user_login = token.executor.login
-
-    # Do not process steps for which there's nothing to do
-    processable_steps = steps.reject { |step| step.class.in?(STEPS_WITH_NO_TARGET_PROJECT_TO_RESTORE_OR_DESTROY) }
-    target_project_names = processable_steps.map(&:target_project_name).uniq.compact
-    target_project_names.each do |target_project_name|
-      Project.restore(target_project_name, user: token_user_login)
-    end
-
-    target_packages = processable_steps.map(&:target_package).uniq.compact
-    target_packages.each { |target_package| Workflows::ScmEventSubscriptionCreator.new(token, workflow_run, scm_webhook, target_package).call }
   end
 end

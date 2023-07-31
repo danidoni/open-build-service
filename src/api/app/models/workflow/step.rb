@@ -79,6 +79,21 @@ class Workflow::Step
     step_instructions[:source_project]
   end
 
+  # TODO: Extract this into a service
+  def destroy_target_projects
+    # Do not process steps for which there's nothing to do
+    EventSubscription.where(channel: 'scm', token: token, package: target_package).delete_all
+    Project.where(name: target_project).destroy
+  end
+
+  # TODO: Extract this into a service
+  def restore_target_projects
+    token_user_login = token.executor.login
+    Project.restore(target_project_name, user: token_user_login)
+
+    Workflows::ScmEventSubscriptionCreator.new(token, workflow_run, scm_webhook, target_package).call
+  end
+
   private
 
   def target_project_base_name

@@ -8,6 +8,14 @@ class Workflow::Step::LinkPackageStep < Workflow::Step
   def call
     return unless valid?
 
+    if scm_webhook.closed_merged_pull_request?
+      destroy_target_projects
+      return
+    elsif scm_webhook.reopened_pull_request?
+      restore_target_projects
+      return
+    end
+
     link_package
   end
 
