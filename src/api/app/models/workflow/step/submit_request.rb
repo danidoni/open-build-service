@@ -80,7 +80,6 @@ class Workflow::Step::SubmitRequest < Workflow::Step
 
   def source_package
     Package.get_by_project_and_name(source_project_name, source_package_name, follow_multibuild: true)
-  rescue Project::Errors::UnknownObjectError, Package::Errors::UnknownObjectError
   end
 
   def source_package_revision
