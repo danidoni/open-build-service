@@ -74,7 +74,7 @@ RSpec.describe Workflow::Step::SubmitRequest, vcr: true do
       end
     end
 
-    context 'for a updated PR' do
+    context 'for an updated PR' do
       let(:action) { 'synchronize' }
 
       context 'when the token user is authorized' do
