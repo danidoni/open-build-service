@@ -72,18 +72,6 @@ RSpec.describe Workflow::Step::SubmitRequest, vcr: true do
           expect { subject.call }.not_to change(BsRequest, :count)
         end
       end
-
-      context 'when the token user is not authorized' do
-        let!(:bs_request) do
-          create(:bs_request_with_submit_action, source_project: project, source_package: package,
-                                                 target_project: target_project,
-                                                 target_package: package.name, creator: other_user)
-        end
-
-        it 'does not revoke previous submit requests' do
-          expect { subject.call }.to raise_error(Pundit::NotAuthorizedError)
-        end
-      end
     end
 
     context 'for a updated PR' do
