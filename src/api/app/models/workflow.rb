@@ -35,7 +35,6 @@ class Workflow
       return unless branch_matches_branches_filter?
 
       call_step_and_collect_artifacts(step)
-      end
     end
   end
 
