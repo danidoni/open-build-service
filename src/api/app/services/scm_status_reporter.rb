@@ -7,6 +7,7 @@ class SCMStatusReporter
     @scm_token = scm_token
     @workflow_run = workflow_run
     @initial_report = initial_report
+    @event_type = event_type
 
     @state = if @initial_report
                event_type.nil? ? 'pending' : 'success'
