@@ -83,7 +83,7 @@ class Workflow::Step
   def destroy_target_projects
     # Do not process steps for which there's nothing to do
     EventSubscription.where(channel: 'scm', token: token, package: target_package).delete_all
-    Project.where(name: target_project).destroy
+    Project.where(name: target_project).destroy_all
   end
 
   # TODO: Extract this into a service
