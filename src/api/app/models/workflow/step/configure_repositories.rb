@@ -41,6 +41,7 @@ class Workflow::Step::ConfigureRepositories < Workflow::Step
   end
 
   def validate_repositories
+    return if step_instructions[:repositories].nil?
     return if step_instructions[:repositories].all? { |repository| repository.keys.sort == REQUIRED_REPOSITORY_KEYS }
 
     # FIXME: This is only to help users migrate their configure_repositories steps when we introduced this breaking change. Remove this after March 1st, 2022.
@@ -56,6 +57,8 @@ class Workflow::Step::ConfigureRepositories < Workflow::Step
   end
 
   def validate_repository_paths
+    return if step_instructions[:repositories].nil?
+
     repository_path_has_all_keys = ->(repository_path) { repository_path.keys.sort == REQUIRED_REPOSITORY_PATH_KEYS }
     return if step_instructions[:repositories].all? { |repository| repository.fetch(:paths, [{}]).all?(&repository_path_has_all_keys) }
 
@@ -64,6 +67,7 @@ class Workflow::Step::ConfigureRepositories < Workflow::Step
   end
 
   def validate_architectures
+    return if step_instructions[:repositories].nil?
     architectures = step_instructions[:repositories].map { |repository| repository.fetch(:architectures, []) }.flatten.uniq
 
     # Store architectures to avoid fetching them again later in #call
