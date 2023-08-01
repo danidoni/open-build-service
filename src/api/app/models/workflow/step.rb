@@ -79,14 +79,14 @@ class Workflow::Step
     step_instructions[:source_project]
   end
 
-  # TODO: Extract this into a service
+  # TODO: Extract this into a concern
   def destroy_target_projects
     # Do not process steps for which there's nothing to do
     EventSubscription.where(channel: 'scm', token: token, package: target_package).delete_all
     Project.where(name: target_project.name).destroy_all
   end
 
-  # TODO: Extract this into a service
+  # TODO: Extract this into a concern
   def restore_target_projects
     token_user_login = token.executor.login
     Project.restore(target_project_name, user: token_user_login)
