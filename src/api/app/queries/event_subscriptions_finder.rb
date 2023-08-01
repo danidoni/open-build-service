@@ -1,6 +1,6 @@
 class EventSubscriptionsFinder
   def initialize(relation = EventSubscription.all, event_package_or_request:)
-    @relation = if event_package_or_request.is_a(Package)
+    @relation = if event_package_or_request.is_a?(Package)
                   relation.where(package: event_package_or_request)
                 else
                   relation.where(bs_request: event_package_or_request)
