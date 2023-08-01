@@ -34,7 +34,9 @@ class Workflow
       return unless event_matches_event_filter?
       return unless branch_matches_branches_filter?
 
-      call_step_and_collect_artifacts(step)
+      steps.each do |step|
+        call_step_and_collect_artifacts(step)
+      end
     end
   end
 
