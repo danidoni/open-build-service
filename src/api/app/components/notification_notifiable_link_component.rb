@@ -42,6 +42,8 @@ class NotificationNotifiableLinkComponent < ApplicationComponent
       repository = @notification.event_payload['repository']
       arch = @notification.event_payload['arch']
       "Package #{package} on #{project} project failed to build against #{repository} / #{arch}"
+    when 'Event::CreateReport'
+      "Report for a #{@notification.event_payload['reportable_type'].downcase} created"
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity
@@ -80,6 +82,8 @@ class NotificationNotifiableLinkComponent < ApplicationComponent
     when 'Event::BuildFail'
       Rails.application.routes.url_helpers.package_live_build_log_path(package: @notification.event_payload['package'], project: @notification.event_payload['project'],
                                                                        repository: @notification.event_payload['repository'], arch: @notification.event_payload['arch'])
+    when 'Event::CreateReport'
+      #TODO show endpoint doesn't exist yet
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity

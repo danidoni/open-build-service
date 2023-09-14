@@ -5,6 +5,18 @@ class Report < ApplicationRecord
 
   belongs_to :user, optional: false
   belongs_to :reportable, polymorphic: true, optional: false
+
+  after_create :create_event
+
+  private
+
+  def create_event
+    Event::CreateReport.create(event_parameters)
+  end
+
+  def event_parameters
+    { id: id, user_id: user_id, reportable_id: reportable_id, reportable_type: reportable_type }
+  end
 end
 
 # == Schema Information

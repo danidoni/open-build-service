@@ -12,6 +12,7 @@ class NotificationActionDescriptionComponent < ApplicationComponent
     @target_object = [project, package].compact.join(' / ')
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def call
     tag.div(class: ['smart-overflow']) do
       case @notification.event_type
@@ -28,9 +29,12 @@ class NotificationActionDescriptionComponent < ApplicationComponent
         "#{@user} removed #{@recipient} as #{@role} of #{@target_object}"
       when 'Event::BuildFail'
         "Build was triggered because of #{@notification.event_payload['reason']}"
+      when 'Event::CreateReport'
+        "User '#{@notification.notifiable.user.login}' created a report for a #{@notification.event_payload['reportable_type']}"
       end
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   private
 
