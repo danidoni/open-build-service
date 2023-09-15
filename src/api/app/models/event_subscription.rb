@@ -17,8 +17,7 @@ class EventSubscription < ApplicationRecord
     source_package_watcher: 'Watching the source package',
     target_package_watcher: 'Watching the target package',
     request_watcher: 'Watching the request',
-    admin: 'User with admin role',
-    staff: 'User with staff role'
+    moderator: 'User with moderator role'
   }.freeze
 
   enum channel: {
