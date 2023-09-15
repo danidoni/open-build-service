@@ -266,12 +266,8 @@ module Event
       bs_request.watched_items.includes(:user).map(&:user)
     end
 
-    def admins
-      User.includes(:roles).where(roles: { title: 'Admin' })
-    end
-
-    def staffs
-      User.includes(:roles).where(roles: { title: 'Staff' })
+    def moderators
+      User.includes(:roles).where(roles: { title: 'Admin' }).or(.includes(:roles).where(roles: { title: 'Staff' })
     end
 
     def _roles(role, project, package = nil)
