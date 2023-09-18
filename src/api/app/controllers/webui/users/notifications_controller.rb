@@ -38,7 +38,8 @@ class Webui::Users::NotificationsController < Webui::WebuiController
         render partial: 'update', locals: {
           notifications: paginated_notifications,
           selected_filter: selected_filter,
-          show_read_all_button: show_read_all_button?
+          show_read_all_button: show_read_all_button?,
+          content_moderation_beta_enabled: Flipper.enabled?(:content_moderation, User.session)
         }
       end
     end
