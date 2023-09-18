@@ -65,6 +65,8 @@ class NotificationsFinder
       notifications.for_relationships_deleted
     when 'build_failures'
       notifications.for_failed_builds
+    when 'reports'
+      notifications.for_reports
     else
       notifications.unread
     end
