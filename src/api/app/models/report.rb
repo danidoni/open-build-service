@@ -15,7 +15,7 @@ class Report < ApplicationRecord
   end
 
   def event_parameters
-    { id: id, user_id: user_id, reportable_id: reportable_id, reportable_type: reportable_type }
+    { id: id, user_id: user_id, reportable_id: reportable_id, reportable_type: reportable_type, reason: reason }
   end
 end
 
