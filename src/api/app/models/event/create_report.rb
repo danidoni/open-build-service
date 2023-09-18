@@ -1,7 +1,7 @@
 module Event
   class CreateReport < Base
     receiver_roles :moderator
-    self.description = 'Report for a content has been created'
+    self.description = 'Report for inappropriate content has been created'
 
     payload_keys :id, :user_id, :reportable_id, :reportable_type, :reason
 
