@@ -31,7 +31,7 @@ class NotificationActionDescriptionComponent < ApplicationComponent
         "Build was triggered because of #{@notification.event_payload['reason']}"
       when 'Event::CreateReport'
         capture do
-          concat(tag.p("User '#{@notification.notifiable.user.login}' created a report for a #{@notification.event_payload['reportable_type']} for the following reason:"))
+          concat(tag.p("User '#{@notification.notifiable.reportable.user.login}' created a report for a #{@notification.event_payload['reportable_type']} for the following reason:"))
           concat(tag.p(@notification.event_payload['reason']))
         end
       end
