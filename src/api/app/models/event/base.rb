@@ -267,7 +267,7 @@ module Event
     end
 
     def moderators
-      User.includes(:roles).where(roles: { title: 'Admin' }).or(.includes(:roles).where(roles: { title: 'Staff' })
+      User.includes(:roles).where(roles: { title: 'Admin' }).or(includes(:roles).where(roles: { title: 'Staff' }))
     end
 
     def _roles(role, project, package = nil)
