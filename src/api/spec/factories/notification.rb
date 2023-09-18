@@ -68,6 +68,11 @@ FactoryBot.define do
       event_type { 'Event::BuildFail' }
       notifiable factory: [:package]
     end
+
+    trait :create_report do
+      event_type { 'Event::CreateReport' }
+      notifiable factory: [:report]
+    end
   end
 
   factory :rss_notification, parent: :notification do

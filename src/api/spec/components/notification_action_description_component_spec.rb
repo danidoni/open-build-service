@@ -175,4 +175,18 @@ RSpec.describe NotificationActionDescriptionComponent, type: :component do
       end
     end
   end
+
+  context 'when the notification is for an Event::CreateReport' do
+    context 'with the recipient being a user' do
+      let(:notification) do
+        create(:notification, :create_report)
+      end
+
+      before { render_inline(described_class.new(notification)) }
+
+      it 'renders a div containing who created a report and for what' do
+        expect(rendered_content).to have_selector('div.smart-overflow', text: "User 'user_1' created a report for a comment")
+      end
+    end
+  end
 end

@@ -30,7 +30,7 @@ class NotificationActionDescriptionComponent < ApplicationComponent
       when 'Event::BuildFail'
         "Build was triggered because of #{@notification.event_payload['reason']}"
       when 'Event::CreateReport'
-        "User '#{@notification.notifiable.user.login}' created a report for a #{@notification.event_payload['reportable_type']}"
+        "User '#{@notification.notifiable.user.login}' created a report for a #{@notification.notifiable.reportable_type.downcase}"
       end
     end
   end
