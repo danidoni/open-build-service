@@ -16,10 +16,7 @@
                             <p>or a git commit hash like
                             <em>97561db8664eaf86a1e4c7b77d5fb5d5bff6681e</em></p>'
 
-.list-group.list-group-flush.my-2
-  = render WorkflowRunFilterLinkComponent.new(token: @token, text: 'All', amount: @count['all'],
-                                              filter_item: {}, selected_filter: @selected_filter)
-.list-group.list-group-flush.mt-5.mb-2
+.list-group.list-group-flush.mt-3.mb-2
   %h5.mx-3
     Status
     = render partial: 'webui/shared/info_popover', locals: { position: 'bottom', text: status_info_text }
@@ -52,3 +49,9 @@
                                                placeholder: '12345')
   = render WorkflowRunFilterInputComponent.new(token_id: @token.id, text: 'Commit', selected_input_filter: @selected_filter[:commit_sha],
                                                placeholder: '97561db8664eaf86a1e4c7b77d5fb5d5bff6681e')
+
+.text-center.mt-5.mb-3
+  %button.btn.btn-light.border
+    Clear
+  %button.btn.btn-info#filter-button{ type: :submit }
+    Apply
