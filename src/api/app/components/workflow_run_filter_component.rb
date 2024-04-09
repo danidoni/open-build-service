@@ -9,9 +9,9 @@ class WorkflowRunFilterComponent < ApplicationComponent
 
   def workflow_runs_count(finder)
     counted_workflow_runs = {}
-    counted_workflow_runs['success'] = finder.succeeded.count
-    counted_workflow_runs['running'] = finder.running.count
-    counted_workflow_runs['fail'] = finder.failed.count
+    counted_workflow_runs['success'] = finder.reset.succeeded.count
+    counted_workflow_runs['running'] = finder.reset.running.count
+    counted_workflow_runs['fail'] = finder.reset.failed.count
     counted_workflow_runs.merge(finder.group_by_generic_event_type)
   end
 end
