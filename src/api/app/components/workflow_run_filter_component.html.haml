@@ -55,4 +55,5 @@
 
   .text-center.mt-4.mb-4
     = link_to('Clear', token_workflow_runs_path(@token, []), class: 'btn btn-light border')
-    = submit_tag('Apply', class: 'btn btn-info', id: 'filter-button')
+    %button.btn.btn-info#filter-button{ type: :submit }
+      Apply
