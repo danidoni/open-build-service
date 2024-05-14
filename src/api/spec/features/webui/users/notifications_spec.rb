@@ -49,6 +49,7 @@ RSpec.describe 'User notifications', :js do
         toggle_checkbox("notification_ids_#{notification_for_projects_comment.id}")
         toggle_checkbox("notification_ids_#{another_notification_for_projects_comment.id}")
         click_button('done-button')
+        save_screenshot('afterdone.png')
       end
 
       it 'marks all comment notification as read' do
