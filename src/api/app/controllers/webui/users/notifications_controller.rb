@@ -1,69 +1,80 @@
 class Webui::Users::NotificationsController < Webui::WebuiController
-  VALID_NOTIFICATION_TYPES = %w[read reviews comments requests unread incoming_requests outgoing_requests relationships_created relationships_deleted
-                                build_failures reports workflow_runs appealed_decisions].freeze
+  include Webui::NotificationsFilter
 
-  # TODO: Remove this when we'll refactor kerberos_auth
-  before_action :kerberos_auth
-  before_action :check_param_type, :check_param_project, only: :index
+  ALLOWED_FILTERS = %w[all comments requests incoming_requests outgoing_requests relationships_created relationships_deleted build_failures
+                       reports reviews workflow_runs appealed_decisions].freeze
+  ALLOWED_STATES = %w[unread read].freeze
 
-  after_action :verify_policy_scoped
+  before_action :require_login
+  before_action :set_filter_type, :set_filter_state, only: %i[index update]
+  before_action :set_notifications, only: %i[index update]
+  before_action :set_notifications_to_be_updated, only: [:update]
+  before_action :set_show_read_all_button
+  before_action :set_selected_filter
 
   def index
-    @notifications = paginated_notifications
-    @show_read_all_button = show_read_all_button?
     @filtered_project = Project.find_by(name: params[:project])
-    @selected_filter = selected_filter
     @current_user = User.session
+
+    @notifications = @notifications.page(params[:page])
+    params[:page] = @notifications.total_pages if @notifications.out_of_range?
+    params[:show_more] ? show_more(@notifications) : @notifications
   end
 
   def update
-    notifications = if params[:update_all]
-                      fetch_notifications
-                    else
-                      fetch_notifications.where(id: params[:notification_ids])
-                    end
     # rubocop:disable Rails/SkipsModelValidations
-    read_count = notifications.where(delivered: false).update_all('delivered = !delivered')
-    unread_count = notifications.where(delivered: true).update_all('delivered = !delivered')
+    read_count = @notifications.where(delivered: false).update_all('delivered = !delivered')
+    unread_count = @notifications.where(delivered: true).update_all('delivered = !delivered')
     # rubocop:enable Rails/SkipsModelValidations
 
-    if read_count.zero? && unread_count.zero?
-      flash.now[:error] = "Couldn't update the notifications"
-    else
-      send_notifications_information_rabbitmq(read_count, unread_count)
-    end
+    @notifications = @notifications.page(params[:page])
+    params[:page] = @notifications.total_pages if @notifications.out_of_range?
+    params[:show_more] ? show_more(@notifications) : @notifications
 
     respond_to do |format|
       format.html { redirect_to my_notifications_path }
       format.js do
         render partial: 'update', locals: {
-          notifications: paginated_notifications,
-          selected_filter: selected_filter,
-          show_read_all_button: show_read_all_button?,
+          notifications: @notifications,
+          selected_filter: @selected_filter,
+          show_read_all_button: @show_read_all_button,
           user: User.session
         }
       end
+      send_notifications_information_rabbitmq(read_count, unread_count)
     end
   end
 
   private
 
-  def selected_filter
-    { type: params[:type], project: params[:project], group: params[:group] }
+  def set_notifications
+    @notifications = User.session!.notifications.for_web.includes(notifiable: [{ commentable: [{ comments: :user }, :project, :bs_request_actions] }, :bs_request_actions, :reviews])
+    @notifications = @notifications.for_project_name(params[:project]) if params[:project].present?
+    @notifications = @notifications.for_group_title(params[:group]) if params[:group].present?
+    @notifications = filter_notifications_by_type(@notifications, @filter_type)
+    @notifications = filter_notifications_by_state(@notifications, @filter_state)
   end
 
-  def check_param_type
-    return if params[:type].nil? || VALID_NOTIFICATION_TYPES.include?(params[:type])
-
-    flash[:error] = 'Filter not valid.'
-    redirect_to my_notifications_path
+  def set_notifications_to_be_updated
+    @notifications = @notifications.where(id: params[:notification_ids]) if params[:notification_ids].present?
   end
 
-  def check_param_project
-    return unless params[:project] == ''
+  def set_show_read_all_button
+    @show_read_all_button = @notifications.count > Notification::MAX_PER_PAGE
+  end
 
-    flash[:error] = 'Filter not valid.'
-    redirect_to my_notifications_path
+  def set_filter_type
+    @filter_type = params[:kind] || 'all'
+    raise FilterNotSupportedError if @filter_type.present? && ALLOWED_FILTERS.exclude?(@filter_type)
+  end
+
+  def set_filter_state
+    @filter_state = params[:state] || 'unread'
+    raise FilterNotSupportedError if @filter_state.present? && ALLOWED_STATES.exclude?(@filter_state)
+  end
+
+  def set_selected_filter
+    @selected_filter = { kind: @filter_type, state: @filter_state, project: params[:project], group: params[:group] }
   end
 
   def show_more(notifications)
@@ -72,26 +83,13 @@ class Webui::Users::NotificationsController < Webui::WebuiController
     notifications.page(params[:page]).per([total, Notification::MAX_PER_PAGE].min)
   end
 
-  def fetch_notifications
-    notifications = policy_scope(Notification).for_web.includes(notifiable: [{ commentable: [{ comments: :user }, :project, :bs_request_actions] }, :bs_request_actions, :reviews])
-
-    if params[:project]
-      notifications.unread.for_project_name(params[:project])
-    elsif params[:group]
-      notifications.unread.for_group_title(params[:group])
+  def filter_notifications_by_state(notifications, filter_state)
+    case filter_state
+    when 'read'
+      notifications.read
     else
-      notifications.for_notifiable_type(params[:type])
+      notifications.unread
     end
-  end
-
-  def paginated_notifications
-    notifications = fetch_notifications
-    params[:page] = notifications.page(params[:page]).total_pages if notifications.page(params[:page]).out_of_range?
-    params[:show_more] ? show_more(notifications) : notifications.page(params[:page])
-  end
-
-  def show_read_all_button?
-    fetch_notifications.count > Notification::MAX_PER_PAGE
   end
 
   def send_notifications_information_rabbitmq(read_count, unread_count)
