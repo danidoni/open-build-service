@@ -58,7 +58,7 @@ RSpec.describe Webui::NotificationHelper do
     context 'when displaying users or groups' do
       let(:notification) { create(:notification, :request_created) }
 
-      it { expect(avatars(notification.for_notifiable)).to include 'gravatar' }
+      it { expect(avatars(notification)).to include 'gravatar' }
     end
 
     context 'when displaying packages' do
@@ -74,7 +74,7 @@ RSpec.describe Webui::NotificationHelper do
         bs_request
       end
 
-      it { expect(avatars(notification.for_notifiable)).to include 'fa-archive' }
+      it { expect(avatars(notification)).to include 'fa-archive' }
     end
 
     context 'when displaying projects' do
@@ -94,8 +94,8 @@ RSpec.describe Webui::NotificationHelper do
         bs_request
       end
 
-      it { expect(avatars(notification.for_notifiable)).to include 'fa-cubes' }
-      it { expect(avatars(notification.for_notifiable)).to include 'avatars-counter' }
+      it { expect(avatars(notification)).to include 'fa-cubes' }
+      it { expect(avatars(notification)).to include 'avatars-counter' }
     end
   end
 end
