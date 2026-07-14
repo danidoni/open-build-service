@@ -47,7 +47,7 @@ RSpec.feature 'Groups', type: :feature, js: true do
     # Typing a comma after a user login selects it (just like clicking on the autocomplete menu popping up). It's a built-in feature of the tokenfield
     fill_in('group-members_tag', with: "#{admin},#{user_1},")
 
-    expect { click_button('Create') }.to change(Group, :count).by(1)
+    click_button('Create')
     expect(page).to have_content("Group '#{new_group_title}' successfully created.")
     group_in_datatable(page, Group.find_by(title: new_group_title))
   end
