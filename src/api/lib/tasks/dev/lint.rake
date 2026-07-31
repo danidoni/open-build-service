@@ -74,11 +74,12 @@ namespace :dev do
         end
       end
 
-      desc 'Autocorrect rubocop offenses in rails and in root'
+      desc 'Autocorrect rubocop offenses in rails and in root. Optionally pass COP=Cop/Name to fix only that cop.'
       task :autocorrect do
-        sh 'rubocop --autocorrect --ignore_parent_exclusion'
+        cop_flag = ENV['COP'] ? ['--only', ENV['COP']] : []
+        sh 'rubocop', '--autocorrect', '--ignore_parent_exclusion', *cop_flag
         Dir.chdir('../..') do
-          sh 'rubocop --autocorrect'
+          sh 'rubocop', '--autocorrect', *cop_flag
         end
       end
 
