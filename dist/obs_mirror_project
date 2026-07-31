@@ -172,7 +172,7 @@ def directory_verify(path, name, verbose, trialrun)
     puts("Verify #{name} directory '#{path}': failed")
     exit(1) unless trialrun
   end
-  return
+  nil
 end
 
 # verify dest dir
