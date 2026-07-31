@@ -1,3 +1,6 @@
+require 'json'
+require 'set'
+
 namespace :dev do
   namespace :lint do
     # Run this task with: rails dev:lint:all
@@ -78,6 +81,48 @@ namespace :dev do
           sh 'rubocop --autocorrect'
         end
       end
+
+      desc 'List cops that have autocorrectable offenses (sorted by offense count)'
+      task :autocorrectable_cops do
+        offenses = collect_rubocop_offenses
+
+        auto   = offenses.select { |_, data| data[:correctable] }
+        manual = offenses.reject { |_, data| data[:correctable] }
+
+        print_cop_table('Autocorrectable cops', auto)
+        print_cop_table('Non-autocorrectable cops', manual)
+
+        puts "Total: #{offenses.values.sum { |d| d[:count] }} offenses " \
+             "(#{auto.values.sum { |d| d[:count] }} autocorrectable, " \
+             "#{manual.values.sum { |d| d[:count] }} manual)"
+      end
     end
+  end
+end
+
+# Runs rubocop with JSON formatter and returns a hash keyed by cop name.
+# Each value is { count:, files:, correctable: }.
+def collect_rubocop_offenses
+  json_output = `rubocop --format json --ignore_parent_exclusion 2>/dev/null`
+  report = JSON.parse(json_output)
+
+  report['files'].each_with_object({}) do |file, cops|
+    file['offenses'].each do |offense|
+      cop = offense['cop_name']
+      cops[cop] ||= { count: 0, files: Set.new, correctable: offense['correctable'] }
+      cops[cop][:count] += 1
+      cops[cop][:files] << file['path']
+    end
+  end.sort_by { |_, data| -data[:count] }.to_h
+end
+
+def print_cop_table(heading, cops)
+  return if cops.empty?
+
+  puts "\n=== #{heading} (#{cops.values.sum { |d| d[:count] }} offenses) ==="
+  puts format('  %-55s %8s %8s', 'Cop', 'Files', 'Offenses')
+  puts "  #{'-' * 73}"
+  cops.each do |cop, data|
+    puts format('  %-55s %8d %8d', cop, data[:files].size, data[:count])
   end
 end
