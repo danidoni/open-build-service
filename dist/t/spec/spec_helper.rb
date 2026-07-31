@@ -36,13 +36,13 @@ def take_screenshot(example)
 end
 
 def login
-  visit '/session/new'
+  visit('/session/new')
   within('#loginform') do
-    fill_in 'user-login', with: 'Admin'
-    fill_in 'user-password', with: 'opensuse'
+    fill_in('user-login', with: 'Admin')
+    fill_in('user-password', with: 'opensuse')
     click_button('Log In')
   end
-  expect(page).to have_link('top-navigation-profile-dropdown')
+  expect(page).to(have_link('top-navigation-profile-dropdown'))
 end
 
 def logout
@@ -50,5 +50,5 @@ def logout
   within('#top-navigation-area') do
     click_link('Logout')
   end
-  expect(page).to have_no_link('top-navigation-profile-dropdown')
+  expect(page).to(have_no_link('top-navigation-profile-dropdown'))
 end

@@ -66,7 +66,7 @@ class Dog < ApplicationRecord
   #### private
 
   def self.say(string)
-    puts "[Dog's Master] >> #{string}"
+    puts("[Dog's Master] >> #{string}")
   end
 
   private_class_method :say
@@ -89,7 +89,7 @@ class Dog < ApplicationRecord
   protected
 
   def say(string)
-    puts "[#{name}] >> #{string}"
+    puts("[#{name}] >> #{string}")
   end
 
   private

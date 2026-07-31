@@ -25,7 +25,7 @@ def get_build_information(version)
   response = http.request(request)
   JSON.parse(response.body)['jobs'].last
 rescue StandardError => e
-  warn "Error while fetching openQA data: #{e.inspect}"
+  warn("Error while fetching openQA data: #{e.inspect}")
   abort
 end
 
@@ -49,17 +49,17 @@ end
 
 def send_notification(from, to, subject, message)
   mail = Mail.new do
-    from    from
-    to      to
-    subject subject
-    body    message
+    from(   from)
+    to(     to)
+    subject(subject)
+    body(   message)
   end
   settings = { address: SMTP_SERVER, port: 25, enable_starttls_auto: false }
   settings[:domain] = ENV.fetch('HOSTNAME') if ENV.fetch('HOSTNAME', nil).present?
-  mail.delivery_method :smtp, settings
+  mail.delivery_method(:smtp, settings)
   mail.deliver
 rescue StandardError => e
-  warn "#{SMTP_SERVER}: #{e.inspect}"
+  warn("#{SMTP_SERVER}: #{e.inspect}")
   abort
 end
 

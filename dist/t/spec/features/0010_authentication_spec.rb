@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'Authentication', type: :feature do
+RSpec.describe('Authentication', type: :feature) do
   after do
     logout
   end
@@ -14,12 +14,12 @@ RSpec.describe 'Authentication', type: :feature do
       fill_in 'pwd_confirmation', with: 'opensuse'
       click_button('Sign Up')
     end
-    expect(page).to have_text("The account 'test_user' is now active.")
-    expect(page).to have_link('top-navigation-profile-dropdown')
+    expect(page).to(have_text("The account 'test_user' is now active."))
+    expect(page).to(have_link('top-navigation-profile-dropdown'))
   end
 
   it 'is able to login' do
     login
-    expect(page).to have_link('top-navigation-profile-dropdown')
+    expect(page).to(have_link('top-navigation-profile-dropdown'))
   end
 end

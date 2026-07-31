@@ -24,7 +24,7 @@ class Webui::DogsController < ApplicationController
   # GET /dogs/1
   def show
     if @dog.present?
-      authorize @dog
+      authorize(@dog)
     else
       skip_authorization
     end
@@ -33,40 +33,40 @@ class Webui::DogsController < ApplicationController
   # GET /dogs/new
   def new
     @dog = Dog.new
-    authorize @dog
+    authorize(@dog)
   end
 
   # GET /dogs/1/edit
   def edit
-    authorize @dog
+    authorize(@dog)
   end
 
   # POST /dogs
   def create
     @dog = Dog.new(dog_params)
-    authorize @dog
+    authorize(@dog)
     if @dog.save
-      redirect_to @dog, notice: 'Dog was successfully created.'
+      redirect_to(@dog, notice: 'Dog was successfully created.')
     else
-      render :new
+      render(:new)
     end
   end
 
   # PATCH/PUT /dogs/1
   def update
-    authorize @dog
+    authorize(@dog)
     if @dog.update(dog_params)
-      redirect_to @dog, notice: 'Dog was successfully updated.'
+      redirect_to(@dog, notice: 'Dog was successfully updated.')
     else
-      render :edit
+      render(:edit)
     end
   end
 
   # DELETE /dogs/1
   def destroy
-    authorize @dog
+    authorize(@dog)
     @dog.destroy
-    redirect_to dogs_url, notice: 'Dog was successfully destroyed.'
+    redirect_to(dogs_url, notice: 'Dog was successfully destroyed.')
   end
 
   #### Non CRUD actions
@@ -76,7 +76,7 @@ class Webui::DogsController < ApplicationController
   def blacks
     @dogs = policy_scope(Dog).blacks
     call_them(@dogs)
-    render :index
+    render(:index)
   end
 
   #### Non actions methods

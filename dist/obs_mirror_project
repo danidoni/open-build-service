@@ -68,7 +68,7 @@ Options help:
   # This displays the help screen, all programs are
   # assumed to have this option.
   opts.on('-h', '--help', 'Display this screen') do
-    puts opts
+    puts(opts)
     exit
   end
 end
@@ -161,15 +161,15 @@ end
 
 # method for verify directory
 def directory_verify(path, name, verbose, trialrun)
-  puts "\nVerify #{name} directory '#{path}':" if verbose
+  puts("\nVerify #{name} directory '#{path}':") if verbose
   unless FileTest.directory?(path.to_s)
-    puts "Creating #{name} directory: #{path}"
+    puts("Creating #{name} directory: #{path}")
     system("mkdir -p #{path}") unless trialrun
   end
   if FileTest.directory?(path.to_s) && FileTest.writable?(path.to_s)
-    puts "Verify #{name} directory '#{path}': ok"
+    puts("Verify #{name} directory '#{path}': ok")
   else
-    puts "Verify #{name} directory '#{path}': failed"
+    puts("Verify #{name} directory '#{path}': failed")
     exit(1) unless trialrun
   end
   return

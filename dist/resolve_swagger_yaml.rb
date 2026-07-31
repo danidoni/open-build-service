@@ -26,7 +26,7 @@ class ResolveSwaggerYAML
       parser.on('-o', '--output PATH/TO/SWAGGER.YAML', 'specify output location of resolved swagger yaml file') { |o| @output_file = o }
       parser.on('-f', '--force', 'allow overwrite of an existing file') { |f| @force = f }
       parser.on('-h', '--help', 'Print this help') do
-        puts parser
+        puts(parser)
         exit
       end
     end
@@ -38,7 +38,7 @@ class ResolveSwaggerYAML
     return if File.file?(@input_file)
 
     @log.error("The specified input file does not exist: #{@input_file}")
-    exit 1
+    exit(1)
   end
 
   def resolve_swagger_yaml
@@ -57,7 +57,7 @@ class ResolveSwaggerYAML
   def output_yaml_file(yaml_content:)
     if File.file?(@output_file) && !@force
       @log.error("The file already exists, use '-f' to force overwrite: #{@output_file}")
-      exit 1
+      exit(1)
     end
 
     File.write(@output_file, yaml_content)

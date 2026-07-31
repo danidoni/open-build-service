@@ -3,7 +3,7 @@ require 'capybara/apparition'
 require 'capybara/dsl'
 require 'socket'
 
-Capybara.register_driver :selenium_chrome_headless do |app|
+Capybara.register_driver(:selenium_chrome_headless) do |app|
   options = {
     window_size:         [1280, 1024],
     js_errors:           false,
@@ -35,7 +35,7 @@ hostname = ipaddress if hostname.empty?
 Capybara.app_host = ENV.fetch('SMOKETEST_HOST', "https://#{hostname}")
 
 RSpec.configure do |config|
-  config.include Capybara::DSL
+  config.include(Capybara::DSL)
   config.before do
     page.driver.add_headers('User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0')
   end
