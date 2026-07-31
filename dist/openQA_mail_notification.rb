@@ -49,10 +49,10 @@ end
 
 def send_notification(from, to, subject, message)
   mail = Mail.new do
-    from(   from)
-    to(     to)
+    from(from)
+    to(to)
     subject(subject)
-    body(   message)
+    body(message)
   end
   settings = { address: SMTP_SERVER, port: 25, enable_starttls_auto: false }
   settings[:domain] = ENV.fetch('HOSTNAME') if ENV.fetch('HOSTNAME', nil).present?
