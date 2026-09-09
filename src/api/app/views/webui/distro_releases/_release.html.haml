@@ -15,7 +15,7 @@
             %span.badge.text-bg-primary
               = ra.architecture.name
   - component.with_header do
-    %h5.card-title= distro_release.name
+    %h5.card-title= link_to distro_release.name, distro_release_path(distro_release.distro, distro_release)
 
   - if policy(distro_release).destroy?
     - component.with_delete_button do

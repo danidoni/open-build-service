@@ -7,11 +7,17 @@ class Webui::DistroReleasesController < Webui::WebuiController
 
   #### Callbacks macros: before_action, after_action, etc.
   before_action :set_distro
-  before_action :set_distro_release, only: %i[update destroy]
+  before_action :set_project
+  before_action :set_distro_release, only: %i[show update destroy]
   # Pundit authorization policies control
   after_action :verify_authorized
 
   #### CRUD actions
+
+  def show
+    authorize @distro_release
+    @vendor = @distro.vendor
+  end
 
   def create
     @distro_release = DistroRelease.new(distro_release_params.merge(distro_id: params[:distro_id]))
@@ -50,12 +56,16 @@ class Webui::DistroReleasesController < Webui::WebuiController
     @distro = Distro.find(params.expect(:distro_id))
   end
 
+  def set_project
+    @project = @distro.project
+  end
+
   # Only allow a trusted parameter "white list" through.
   def distro_release_params
     params.expect(distro_release: [:name, :description, :url, { repository_architecture_ids: [] }])
   end
 
   def set_distro_release
-    @distro_release = DistroRelease.find(params.expect(:id))
+    @distro_release = @distro.distro_releases.find(params.expect(:id))
   end
 end
