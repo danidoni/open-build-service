@@ -24,20 +24,27 @@
               = render partial: 'webui/shared/external_link', locals: { text: @distro.url, url: @distro.url }
           - if policy(@distro).destroy?
             %li
-              = link_to(vendor_distro_path(@distro.vendor, @distro), method: :delete, class: 'text-danger',
-                data: { confirm: 'Are you sure you want to delete this distro?'}) do
+              = link_to(vendor_distro_path(@distro.vendor, @distro),
+                method: :delete, class: 'text-danger',
+                data: { confirm: 'Are you sure you want to delete this distro?' }) do
                 %i.fas.fa-trash-can
                 %span.nav-item-name Delete
-    %h3
+    %h3.mt-4
       Releases
+    .row.mt-3
+      .col-lg-12
+        = render partial: 'webui/distros/timeline', locals: { distro: @distro }
+
     .row.mt-3
       - @distro.distro_releases.each do |distro_release|
         .col-lg-3.col-md-4.col-sm-6.col-12.mb-3
           = render partial: 'webui/distro_releases/release', locals: { distro_release: distro_release }
       .ps-0
         - if policy(DistroRelease.new(distro: @distro)).new?
-          = render partial: 'webui/distro_releases/modal', locals: { model: DistroRelease.new(distro: @distro),
-                                                    url: distro_releases_path(@distro), text: 'New Release', icon: 'circle-plus' }
+          = render partial: 'webui/distro_releases/modal',
+                   locals: { model: DistroRelease.new(distro: @distro),
+                             url: distro_releases_path(@distro),
+                             text: 'New Release', icon: 'circle-plus' }
 
 .modal.fade#delete-distro-release-modal{ tabindex: -1, role: 'dialog', aria: { labelledby: 'delete-distro-modal-label', hidden: true } }
   .modal-dialog.modal-dialog-centered{ role: 'document' }

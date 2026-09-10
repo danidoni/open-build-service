@@ -1,0 +1,97 @@
+:ruby
+  year_fraction = ->(date) { date.year + (date.yday.to_f / 365.25) }
+  releases_with_dates = distro.distro_releases.includes(:distro_release_lifecycles).map do |dr|
+    lcs = dr.distro_release_lifecycles.select { |l| l.date.present? }.sort_by(&:date)
+    phases = []
+    if lcs.any?
+      if lcs.size == 1
+        lc = lcs.first
+        end_date = [lc.date + 1.day, Date.today].max
+        phases << {
+          start_date: lc.date,
+          end_date: end_date,
+          status_class: lc.status_class,
+          label: "#{dr.name} - #{lc.name}",
+          title: "#{dr.name} - #{lc.name} (since #{lc.date})"
+        }
+      else
+        lcs.each_cons(2) do |lc1, lc2|
+          phases << {
+            start_date: lc1.date,
+            end_date: lc2.date,
+            status_class: lc1.status_class,
+            label: lc1.name,
+            title: "#{dr.name}: #{lc1.name} to #{lc2.name} (#{lc1.date} - #{lc2.date})"
+          }
+        end
+      end
+    else
+      start_date = dr.created_at.to_date
+      end_date = [start_date + 1.day, Date.today].max
+      phases << {
+        start_date: start_date,
+        end_date: end_date,
+        status_class: 'text-bg-primary',
+        label: dr.name,
+        title: "#{dr.name} (since #{start_date})"
+      }
+    end
+    { distro_release: dr, phases: phases }
+  end
+
+  if releases_with_dates.any?
+    all_dates = releases_with_dates.flat_map { |r| r[:phases].map { |p| [p[:start_date], p[:end_date]] } }.flatten
+    min_year = all_dates.map(&:year).min
+    max_year = all_dates.map(&:year).max
+    total_years = max_year - min_year
+    total_years = 1 if total_years <= 0
+    step_size = if total_years <= 10
+                  1
+                elsif total_years <= 20
+                  2
+                elsif total_years <= 50
+                  5
+                else
+                  10
+                end
+    repeating_gradient = "repeating-linear-gradient(to right, transparent 0%, " \
+                         "transparent calc(100% / #{total_years} - 1px), " \
+                         "var(--border) calc(100% / #{total_years} - 1px), " \
+                         "var(--border) calc(100% / #{total_years}))"
+
+    # Compute percentage positions in Ruby to avoid long template lines
+    releases_with_dates.each do |r|
+      r[:phases].each do |p|
+        s_frac = year_fraction.call(p[:start_date])
+        e_frac = year_fraction.call(p[:end_date])
+        left_pct = [[((s_frac - min_year) / total_years * 100), 0.0].max, 100.0].min
+        width_pct = [[((e_frac - s_frac) / total_years * 100), 0.5].max, 100.0 - left_pct].min
+        p[:left_pct] = left_pct
+        p[:width_pct] = width_pct
+      end
+    end
+  end
+
+- if releases_with_dates.any?
+  .timeline-container
+    .timeline-table
+      .row.header
+        .name Release
+        .timeline
+          - (min_year...max_year).each do |yr|
+            - if (yr - min_year) % step_size == 0
+              .year-label= yr
+            - else
+              .year-label{ style: "color: transparent;" }
+      - releases_with_dates.each do |r|
+        - dr = r[:distro_release]
+        .row
+          .name= dr.name
+          .timeline{ style: "background: #{repeating_gradient};" }
+            - r[:phases].each do |phase|
+              .bar{ class: phase[:status_class],
+                    style: "left:#{phase[:left_pct]}%;width:#{phase[:width_pct]}%;",
+                    title: phase[:title] }
+                = phase[:label]
+- else
+  %p.text-muted No releases with dates available for timeline visualization.
