@@ -39,7 +39,7 @@ RSpec.describe ApplicationController do # rubocop:disable RSpec/SpecFilePathForm
     end
   end
 
-  context 'session auth' do
+  context 'legacy session auth' do
     let!(:user) { create(:confirmed_user) }
 
     before do
@@ -48,6 +48,25 @@ RSpec.describe ApplicationController do # rubocop:disable RSpec/SpecFilePathForm
 
     describe '#extract_user' do
       it { expect { subject }.to change(User, :session) }
+    end
+  end
+
+  context 'devise session auth' do
+    include Devise::Test::ControllerHelpers
+
+    let!(:user) { create(:confirmed_user, login: 'hans') }
+
+    before do
+      sign_in user
+    end
+
+    describe '#extract_user' do
+      it { expect { subject }.to change(User, :session) }
+
+      it 'sets the Warden user as the session user' do
+        subject
+        expect(User.session).to eq(user)
+      end
     end
   end
 
@@ -60,6 +79,35 @@ RSpec.describe ApplicationController do # rubocop:disable RSpec/SpecFilePathForm
 
     describe '#extract_user' do
       it { expect { subject }.to change(User, :session) }
+
+      context 'with a wrong password' do
+        before do
+          request.headers['HTTP_AUTHORIZATION'] = "Basic #{Base64.encode64('hans:wrong')}"
+        end
+
+        it { expect { subject }.not_to change(User, :session) }
+      end
+
+      context 'when anonymous access is off and the credentials are wrong' do
+        before do
+          allow(Configuration).to receive(:anonymous).and_return(false)
+          request.headers['HTTP_AUTHORIZATION'] = "Basic #{Base64.encode64('hans:wrong')}"
+        end
+
+        it { expect(subject.status).to eq(401) }
+        it { expect(subject.headers['WWW-Authenticate']).to eq('basic realm="API login"') }
+        it { expect(subject.headers['X-Opensuse-Errorcode']).to eql('authentication_required') }
+      end
+
+      context 'with a legacy password hash' do
+        let!(:user) { create(:user_deprecated_password, login: 'hans') }
+
+        it 'migrates the password to bcrypt on a successful Basic login' do
+          subject
+          expect(BCrypt::Password.new(user.reload.password_digest)).to be_is_password('buildservice')
+          expect(user.deprecated_password).to be_nil
+        end
+      end
 
       describe 'wrong auth' do
         before do
