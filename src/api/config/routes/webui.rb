@@ -451,10 +451,24 @@ namespace :user do
 end
 # Legacy routes end
 
-constraints(RoutesHelper::SessionAuthMatcher) do
-  resource :session, only: %i[new create], controller: 'webui/session' do
-    collection do
-      get :reset
+if Rails.env.local?
+  # Development and test: Devise sessions. devise_for with skip: :all only registers the
+  # :user mapping. The routes are written out so the URLs and helper names stay the same
+  # (new_session_path, session_path, reset_session_path) for the rest of the app.
+  devise_for :users, skip: :all
+  constraints(RoutesHelper::SessionAuthMatcher) do
+    devise_scope :user do
+      get 'session/new', to: 'webui/devise_sessions#new', as: :new_session
+      post 'session', to: 'webui/devise_sessions#create', as: :session
+      match 'session/reset', to: 'webui/devise_sessions#destroy', as: :reset_session, via: %i[get delete]
+    end
+  end
+else
+  constraints(RoutesHelper::SessionAuthMatcher) do
+    resource :session, only: %i[new create], controller: 'webui/session' do
+      collection do
+        get :reset
+      end
     end
   end
 end
