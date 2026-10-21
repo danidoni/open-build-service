@@ -16,7 +16,9 @@ module Authenticator
   def extract_user
     user = if ::Configuration.proxy_auth_mode_enabled?
              find_or_create_proxy_user
-           elsif request.session[:login] # Webui Session Auth
+           elsif (devise_user = devise_session_user) # Devise session (development and test only)
+             devise_user
+           elsif request.session[:login] # Webui Session Auth (legacy, kept as fallback)
              User.find_by!(login: request.session[:login])
            elsif authorization_headers.present? # API Basic Auth
              basic_auth_info = basic_auth
@@ -89,6 +91,11 @@ module Authenticator
 
     user.update!(user_proxy_information)
     user
+  end
+
+  # Warden session user. Devise maps :user in development and test only.
+  def devise_session_user
+    Devise.mappings.key?(:user) && request.env['warden']&.user(:user)
   end
 
   def basic_auth

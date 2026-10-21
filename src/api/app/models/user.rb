@@ -16,6 +16,23 @@ class User < ApplicationRecord
   # password yet. this is for backwards compatibility
   has_secure_password validations: false
 
+  # Devise DatabaseAuthenticatable is used in development and test only.
+  # Production logs in through proxy mode. The password hash stays in password_digest;
+  # Devise reads it through the encrypted_password alias.
+  if Rails.env.local?
+    devise :database_authenticatable
+    alias_attribute :encrypted_password, :password_digest
+  end
+
+  # Devise's database_authenticatable defines a helper password_digest(password) that
+  # hashes a password. Its name clashes with the password_digest column reader. Without
+  # an argument, return the column; with an argument, use Devise's helper.
+  def password_digest(*args)
+    return self[:password_digest] if args.empty?
+
+    super
+  end
+
   has_many :watched_items, dependent: :destroy
   has_many :groups_users, inverse_of: :user
   has_many :roles_users, inverse_of: :user, dependent: :destroy
@@ -261,6 +278,14 @@ class User < ApplicationRecord
     return false unless value
 
     hash_string(value) == deprecated_password
+  end
+
+  # Devise calls this on every password check. It delegates to authenticate, so the
+  # legacy hash to bcrypt migration runs in the same place for every login path.
+  def valid_password?(unencrypted_password)
+    return false if password_digest.blank? && deprecated_password.blank?
+
+    authenticate(unencrypted_password).present?
   end
 
   def authenticate(unencrypted_password)
