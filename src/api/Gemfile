@@ -45,6 +45,8 @@ gem 'xmlhash'
 gem 'pundit'
 # for password hashing
 gem 'bcrypt'
+# Devise DatabaseAuthenticatable for dev and test (proxy auth is used in production)
+gem 'devise'
 # for threaded comments
 gem 'acts_as_tree'
 # js plotting (OBS monitor)
